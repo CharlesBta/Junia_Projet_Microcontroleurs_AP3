@@ -1,0 +1,22 @@
+{
+    "cas_1_passe_bas": {
+        "R0_kohm": 10.0,
+        "C0_nf": 47.0
+    },
+    "cas_2_passe_haut": {
+        "R1_kohm": 5.6,
+        "C1_nf": 6.8
+    },
+    "cas_3_actif": {
+        "R2_kohm": 10.0,
+        "C2_nf": 68.0,
+        "R3_kohm": 10.0,
+        "C3_nf": 15.0
+    },
+    "cas_4_actif": {
+        "R4_kohm": 10.0,
+        "C4_nf": 15.0,
+        "R5_kohm": 10.0,
+        "C5_nf": 47.0
+    }
+}
