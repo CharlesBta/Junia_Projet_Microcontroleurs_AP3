@@ -14,6 +14,8 @@
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
 
 \newcommand{\DocName}{Projet Microcontrôleurs - Rapport}
 \newcommand{\DocAuthors}{\bsc{Da Silva} Tristan - \bsc{Battaglia} Charles-Antoine \\ \bsc{Botté-Magalhaes} Jules - \bsc{Gauthier} Keanu}
@@ -109,7 +111,59 @@
 
 \chapter{Calculs valeurs analogiques}
 
-\section*{Dimensionnement du FILTER1}
+\section{Dimensionnement du PREAMP\_R et du PREAMP\_L}
+\textit{Le dimensionnement du PREAMP\_R est identique à celui du PREAMP\_L, on ne détaille que le PREAMP\_R}
+\\
+
+On prend :
+\[f_c = 20 \text{ Hz} \quad \text{et} \quad C_{pre0} = 0,68 \times 10^{-6} \text{ F}
+\]
+
+On a :
+\[ f_c = \frac{\omega_c}{2\pi} = \frac{1}{2\pi R_{pre0} C_{pre0}} = 20 \text{ Hz}
+\]
+
+Donc : 
+\[ R_{pre0} = \frac{1}{2\pi C_{pre0} \times 20} = \frac{1}{2\pi \times 0,68 \times 10^{-6} \times 20} = 11,7 \text{ k}\Omega
+\]
+\\
+
+\textit{Pour calculer la valeur de \(R_{pre1}\) il a fallu regarder la tension aux bornes de notre entrée jack à l'aide d'un oscilloscope, pour cela on a émis un son de 1000 Hz avec un ordinateur qui avait le volume à 100\%. \\ 
+Après lecture de l'oscilloscope, on a les curseurs \(A_Y = 180\,\text{mV}\) et \(B_Y = -220\,\text{mV}\).}
+\\
+
+On a : 
+\[ V_{ccin} = V_{pp} = V_{max} - V_{min} = 180 \text{ mV} - (-220 \text{ mV}) = 400 \text{ mV} = 0,4 \text{ V}
+\]
+
+On pose : 
+\[V_{ccout} = 5 \text{ V}\]
+
+On a : 
+\[|G| = \frac{V_{ccout}}{V_{ccin}} = \frac{5}{0,4} = 12,5 
+\]
+Donc : 
+\[ R_{pre1} = |G| \times R_{pre0} = 12,5 \times 12 \text{ k}\Omega = 150 \text{ k}\Omega
+\]
+
+On prend donc pour valeurs de composants à disposition : \\
+\textbf{\textcolor{red}{Resistance en parraleles a pas oublier}}
+\[
+\fbox{$R_{pre0} = 11 \text{ k}\Omega$}
+\]
+\[\fbox{$R_{pre1} = 149,86 \text{ k}\Omega$} 
+\]
+\[
+\fbox{$C_{pre0} = 0,68 \times 10^{-6} \text{ F}$}
+\]
+
+Il faut donc recalculer la valeur de \(f_c\) avec la valeur de \(R_{pre0}\) à disposition :
+\[ f_{c\text{r\'eel}} = \frac{1}{2\pi R_{pre0} C_{pre0}} = \frac{1}{2\pi \times 11 \times 10^3 \times 0,68 \times 10^{-6}} = 21,3 \text{ Hz}
+\]
+
+\newpage
+\section{Dimensionnement des filtres}
+\subsection{FILTER1}
 On a :
 \[f = 250 \text{ Hz}
 \]
@@ -144,7 +198,7 @@ On prend donc pour valeurs de composants à disposition :
 
 
 \newpage
-\section*{Dimensionnement du FILTER2}
+\subsection{FILTER2}
 
 On a :
 \[
@@ -186,7 +240,7 @@ On prend donc pour valeurs de composants à disposition :
 \]
 
 \newpage
-\section*{Dimensionnement du FILTER3}
+\subsection{FILTER3}
 On a :
 \[f_{c3L} = 250 \text{ Hz} \quad \text{et} \quad f_{c3H} = 1 \times 10^3 \text{ Hz}
 \] 
@@ -234,7 +288,7 @@ On prend donc pour valeurs de composants à disposition :
 \]
 
 \newpage
-\section*{Dimensionnement du FILTER4}
+\subsection{FILTER4}
 On a :
 \[f_{c4L} = 1 \times 10^3 \text{ Hz} \quad \text{et} \quad f_{c4H} = 4 \times 10^3 \text{ Hz}
 \] 
