@@ -12,6 +12,8 @@
 \usepackage{xcolor}
 \usepackage{soul}
 \usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
 
 \newcommand{\DocName}{Projet Microcontrôleurs - Rapport}
 \newcommand{\DocAuthors}{\bsc{Da Silva} Tristan - \bsc{Battaglia} Charles-Antoine \\ \bsc{Botté-Magalhaes} Jules - \bsc{Gauthier} Keanu}
@@ -104,6 +106,179 @@
 \begin{document}
 \maketitle
 \tableofcontents
+
+\chapter{Calculs valeurs analogiques}
+
+\section*{Dimensionnement du FILTER1}
+On a :
+\[f = 250 \text{ Hz}
+\]
+\[\omega = 2\pi f = 2\pi \times 250 = 500\pi \text{ rad/s}
+\]
+
+La fonction de transfert \( H_1(j\omega) \) est donnée par :
+\[H_1(j\omega) = \frac{1}{1 + j R_0 C_0 \omega}
+\]
+
+On définit la fréquence de coupure \( \omega_c \) par :
+\[
+\omega_c = \frac{1}{R_0 C_0}
+\]
+\[
+f_c = \frac{\omega_c}{2\pi} = \frac{1}{2\pi R_0 C_0}=250 \text{ Hz}
+\]
+
+On fixe :
+\[C_0 = 47 \times 10^{-9} \text{ F}
+\]
+\[R_0 = \frac{1}{2\pi \times 250 \times 47 \times 10^{-9}} = 13,5 \text{ k}\Omega
+\]
+
+On prend donc pour valeurs de composants à disposition :
+\[
+\fbox{$R_0 = 10 \text{ k}\Omega$}
+\]
+\[
+\fbox{$C_0 = 47 \times 10^{-9} \text{ F}$}
+\]
+
+
 \newpage
+\section*{Dimensionnement du FILTER2}
+
+On a :
+\[
+f = 4 \times 10^3 \text{ Hz}
+\]
+\[
+\omega = 2\pi f = 2\pi \times 4 \times 10^3 = 8000\pi \text{ rad/s}
+\]
+
+La fonction de transfert \( H_2(j\omega) \) est donnée par :
+\[
+H_2(j\omega) = \frac{j R_1 C_1 \omega}{1 + j R_1 C_1 \omega}
+\]
+
+On définit la fréquence de coupure \( \omega_c \) par :
+\[
+\omega_c = \frac{1}{R_1 C_1} \quad \Leftrightarrow \quad \frac{\omega}{\omega_c} = R_1 C_1 \omega
+\]
+
+Donc :
+\[
+H_2(j\omega) = \frac{1}{1 + j \frac{\omega}{\omega_c}} \times j \frac{\omega}{\omega_c} = \frac{j \frac{\omega}{\omega_c}}{1 + j \frac{\omega}{\omega_c}}
+\]
+
+On fixe :
+\[
+C_1 = 6,8 \times 10^{-9} \text{ F}
+\]
+\[
+R_1 = \frac{1}{4 \times 10^3 \times 2\pi \times 6,8 \times 10^{-9}} = 5,6 \text{ k} \Omega
+\]
+
+On prend donc pour valeurs de composants à disposition :
+\[
+\fbox{$R_1 = 5,6 \text{ k}\Omega$}
+\]
+\[
+\fbox{$C_1 = 6,8 \times 10^{-9} \text{ F}$}
+\]
+
+\newpage
+\section*{Dimensionnement du FILTER3}
+On a :
+\[f_{c3L} = 250 \text{ Hz} \quad \text{et} \quad f_{c3H} = 1 \times 10^3 \text{ Hz}
+\] 
+
+La fonction de transfert \( H_3(j\omega) \) est donnée par :
+\[H_3(j\omega) = -\frac{R_3}{R_2} \times \frac{j R_2 C_2 \omega}{1 + j R_2 C_2 \omega} \times \frac{1}{1 + j R_3 C_3 \omega}
+\]
+
+On pose: 
+\[R_3 = R_2 = R
+\]
+
+Donc :
+\[H_3(j\omega) = -\frac{1}{1 + j R C_2 \omega} \times j R C_2 \omega \times \frac{1}{1 + j R C_3 \omega}
+\]
+
+On a : 
+\[\omega_{c2} = \frac{1}{R C_2} \quad \text{et} \quad \omega_{c3} = \frac{1}{R C_3}\]
+
+Donc :
+\[H_3(j\omega) = -\frac{1}{1 + j \frac{\omega}{\omega_{c2}}} \times j \frac{\omega}{\omega_{c2}} \times \frac{1}{1 + j \frac{\omega}{\omega_{c3}}}
+\]
+
+On fixe :
+\[R = 10 \text{ k}\Omega
+\]
+
+On pose: 
+\[\frac{\omega_{c2}}{2\pi} = \frac{1}{2\pi R C_2} = f_{c3L} = 250 \text{ Hz}
+ \quad \text{et} \quad \frac{\omega_{c3}}{2\pi} = \frac{1}{2\pi R C_3} = f_{c3H} = 1 \times 10^3 \text{ Hz}
+\]
+
+On a donc :
+\[C_2 = \frac{1}{2\pi R f_{c3L}} = \frac{1}{2\pi \times 10 \times 10^3 \times 250} = 64 \times 10^{-9} \text{ F}
+\]
+\[C_3 = \frac{1}{2\pi R f_{c3H}} = \frac{1}{2\pi \times 10 \times 10^3 \times 1 \times 10^3} = 16 \times 10^{-9} \text{ F}
+\]
+
+On prend donc pour valeurs de composants à disposition :
+\[\fbox{$R_2 = R_3 = 10 \text{ k}\Omega$}
+\]
+\[\fbox{$C_2 = 68 \times 10^{-9} \text{ F}$}
+\]
+\[\fbox{$C_3 = 15 \times 10^{-9} \text{ F}$}
+\]
+
+\newpage
+\section*{Dimensionnement du FILTER4}
+On a :
+\[f_{c4L} = 1 \times 10^3 \text{ Hz} \quad \text{et} \quad f_{c4H} = 4 \times 10^3 \text{ Hz}
+\] 
+
+La fonction de transfert \( H_4(j\omega) \) est donnée par :
+\[H_4(j\omega) = -\frac{R_5}{R_4} \times \frac{j R_4 C_4 \omega}{1 + j R_4 C_4 \omega} \times \frac{1}{1 + j R_5 C_5 \omega}
+\]
+
+On pose: 
+\[R_4 = R_5 = R
+\]
+
+Donc :
+\[H_4(j\omega) = -\frac{1}{1 + j R C_4 \omega} \times j R C_4 \omega \times \frac{1}{1 + j R C_5 \omega}
+\]
+
+On a : 
+\[\omega_{c4} = \frac{1}{R C_4} \quad \text{et} \quad \omega_{c5} = \frac{1}{R C_5}\]
+
+Donc :
+\[H_4(j\omega) = -\frac{1}{1 + j \frac{\omega}{\omega_{c4}}} \times j \frac{\omega}{\omega_{c4}} \times \frac{1}{1 + j \frac{\omega}{\omega_{c5}}}
+\]
+
+On fixe :
+\[R = 10 \text{ k}\Omega
+\]
+
+On pose: 
+\[\frac{\omega_{c4}}{2\pi} = \frac{1}{2\pi R C_4} = f_{c4L} = 1 \times 10^3 \text{ Hz}
+ \quad \text{et} \quad \frac{\omega_{c5}}{2\pi} = \frac{1}{2\pi R C_5} = f_{c4H} = 4 \times 10^3 \text{ Hz}
+\]
+
+On a donc :
+\[C_4 = \frac{1}{2\pi R f_{c4L}} = \frac{1}{2\pi \times 10 \times 10^3 \times 1 \times 10^3} = 16 \times 10^{-9} \text{ F}
+\]
+\[C_5 = \frac{1}{2\pi R f_{c4H}} = \frac{1}{2\pi \times 10 \times 10^3 \times 4 \times 10^3} = 3,9 \times 10^{-9} \text{ F}
+\]
+
+On prend donc pour valeurs de composants à disposition :
+\[\fbox{$R_4 = R_5 = 10 \text{ k}\Omega$}
+\]
+\[\fbox{$C_4 = 15 \times 10^{-9} \text{ F}$}
+\]
+\[\fbox{$C_5 = 4,7 \times 10^{-9} \text{ F}$}
+\]
 
 \end{document}
