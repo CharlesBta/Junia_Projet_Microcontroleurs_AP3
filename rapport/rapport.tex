@@ -17,6 +17,7 @@
 \usepackage{hyperref}
 \hypersetup{hidelinks}
 \usepackage{tikz}
+\usepackage{longtable}
 
 \newcommand{\DocName}{Projet Microcontrôleurs - Rapport}
 \newcommand{\DocAuthors}{\bsc{Da Silva} Tristan - \bsc{Battaglia} Charles-Antoine \\ \bsc{Botté-Magalhaes} Jules - \bsc{Gauthier} Keanu}
@@ -451,6 +452,8 @@ En conclusion, nous pouvons dire qu'un \({\tau_1} = 47~\mathrm{ms}\) est pertine
 
 
 
+\newpage
+
 \section{Dimensionnement des Résistances de référence}
 
 \textit{L'objectif est d'obtenir une tension de référence \(V_{ref}\) égale à \(2{,}5\,\mathrm{V}\), afin que le signal oscille entre \(0\,\mathrm{V}\) et \(5\,\mathrm{V}\). Pour cela, on réalise un pont diviseur de tension avec deux résistances de même valeur.}
@@ -462,6 +465,7 @@ Donc on a :
 \fbox{$R_{ref1} = R_{ref2} = 47\,\mathrm{k}\Omega$}
 \]
 
+\newpage
 
 \section{Dimensionnement des Boutons poussoirs}
 On a :
@@ -487,4 +491,109 @@ On peut en conclure que :
 \[
 \fbox{$R_{B0} = R_{B1} = 10 \,\mathrm{k}\Omega$}
 \]
+\newpage
+\chapter{Tableau récapitulatif des composants utilisés}
+
+\small
+\renewcommand{\arraystretch}{1.25}
+
+\begin{longtable}{|p{5cm}|c|c|p{5cm}|}
+\hline
+\textbf{Désignation} & \textbf{Quantité} & \textbf{Montage} & \textbf{Valeur / référence} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Désignation} & \textbf{Quantité} & \textbf{Montage} & \textbf{Valeur / référence} \\
+\hline
+\endhead
+
+B0, B1 & 2 & Traversant & 1825910-6 Tact. Switch \\
+\hline
+C0 & 1 & Traversant & \(47 \times 10^{-9}\,\mathrm{F}\) \\
+\hline
+C1 & 1 & Traversant & \(6{,}8 \times 10^{-9}\,\mathrm{F}\) \\
+\hline
+C2 & 1 & Traversant & \(68 \times 10^{-9}\,\mathrm{F}\) \\
+\hline
+C3 & 1 & Traversant & \(15 \times 10^{-9}\,\mathrm{F}\) \\
+\hline
+C4 & 1 & Traversant & \(15 \times 10^{-9}\,\mathrm{F}\) \\
+\hline
+C5 & 1 & Traversant & \(4{,}7 \times 10^{-9}\,\mathrm{F}\) \\
+\hline
+CdecMATRIX1 & 1 & Traversant & \(10\,\mu\mathrm{F}\) \\
+\hline
+CdecOPA2, CdecMCU1, CdecOPA1 & 3 & Traversant & \(100\,\mathrm{nF}\) \\
+\hline
+Ce1, Ce2, Ce3, Ce4 & 4 & Traversant & \(10 \times 10^{-6}\,\mathrm{F}\) \\
+\hline
+Cpre0, Cpre1 & 2 & Traversant & \(0{,}68 \times 10^{-6}\,\mathrm{F}\) \\
+\hline
+D0 & 1 & CMS & B340LA-13-F \\
+\hline
+D1, D2, D3, D4 & 4 & Traversant & 1N4148 \\
+\hline
+IC0 & 1 & Traversant & PIC18F25K40 \\
+\hline
+IC0-SOCKET & 1 & Traversant & Socket DIP 28 0.3'' \\
+\hline
+J\_ALIM1 & 1 & Traversant & N/R \\
+\hline
+J\_JACK\_IN1, J\_JACK\_OUT1 & 2 & Traversant & JYO-39-5P switched \\
+\hline
+J3 & 1 & Traversant & N/R \\
+\hline
+J4 & 1 & Traversant & N/R \\
+\hline
+LD1, LD5, LD3, LD7, LD2, LD4, LD0, LD6, LDM1 & 9 & CMS & LG R971 \\
+\hline
+OPA1, OPA2 & 2 & Traversant & MCP6274 \\
+\hline
+OPA1-SOCKET, OPA2-SOCKET & 2 & Traversant & Socket DIP 14 0.3'' \\
+\hline
+Pmix0 & 1 & Traversant & \(10\,\mathrm{k}\Omega\) \\
+\hline
+R\_LED0, R\_LED1, R\_LED2, R\_LED3, R\_LED4, R\_LED5, R\_LED6, R\_LED7, R\_LEDM1 & 9 & CMS & \\
+\hline
+R0 & 1 & Traversant & \(10\,\mathrm{k}\Omega\) \\
+\hline
+R1 & 1 & Traversant & \(5{,}6\,\mathrm{k}\Omega\) \\
+\hline
+R2 & 1 & Traversant & \(10\,\mathrm{k}\Omega\) \\
+\hline
+R3 & 1 & Traversant & \(10\,\mathrm{k}\Omega\) \\
+\hline
+R4 & 1 & Traversant & \(10\,\mathrm{k}\Omega\) \\
+\hline
+R5 & 1 & Traversant & \(10\,\mathrm{k}\Omega\) \\
+\hline
+RB0, RB1 & 2 & Traversant & \(10\,\mathrm{k}\Omega\) \\
+\hline
+Re1, Re2, Re3, Re4 & 4 & Traversant & \(4{,}7\,\mathrm{k}\Omega\) \\
+\hline
+RMCLR1 & 1 & Traversant & \(10\,\mathrm{k}\Omega\) \\
+\hline
+Rmix0, Rmix1 & 2 & Traversant & \(82\,\mathrm{k}\Omega\) \\
+\hline
+Rmix2, Rmix3 & 2 & Traversant & \(82\,\mathrm{k}\Omega\) \\
+\hline
+Rmix4 & 1 & Traversant & \(680\,\mathrm{k}\Omega\) \\
+\hline
+Rpre0, Rpre2 & 2 & Traversant & \(11\,\mathrm{k}\Omega\) \\
+\hline
+Rpre1, Rpre3 & 2 & Traversant & \(149{,}86\,\mathrm{k}\Omega\) \\
+\hline
+Rref1, Rref2 & 2 & Traversant & \(47\,\mathrm{k}\Omega\) \\
+\hline
+Visserie -- Entretoise & 4 & N/A & N/R \\
+\hline
+Visserie -- Vis & 4 & N/A & N/R \\
+\hline
+
+\caption{Liste récapitulative des composants utilisés dans le projet}
+\label{tab:liste_composants}
+\end{longtable}
+
+\normalsize
 \end{document}
