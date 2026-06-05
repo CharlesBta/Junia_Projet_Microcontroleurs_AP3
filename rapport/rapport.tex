@@ -147,8 +147,10 @@ Donc :
 \[ R_{pre1} = |G| \times R_{pre0} = 12,5 \times 12 \text{ k}\Omega = 150 \text{ k}\Omega
 \]
 
-On prend donc pour valeurs de composants à disposition : \\
-\textbf{\textcolor{red}{Resistance en parraleles a pas oublier}}
+On prend donc pour valeurs de composants à disposition : 
+\\
+
+\textit{Pour obtenir une résistance équivalente de \(11\,\mathrm{k}\Omega\), il faut utiliser deux résistances de \(22\,\mathrm{k}\Omega\) montées en parallèle. Pour obtenir une résistance équivalente de \(149{,}86\,\mathrm{k}\Omega\), il faut monter une résistance de \(470\,\mathrm{k}\Omega\) en parallèle avec une résistance de \(220\,\mathrm{k}\Omega\).}
 \[
 \fbox{$R_{pre0} = 11 \text{ k}\Omega$}
 \]
@@ -426,5 +428,66 @@ On prend donc pour valeurs de composants à disposition :
 \]
 \[\fbox{$C_5 = 4,7 \times 10^{-9} \text{ F}$}
 \]
+\newpage
 
+\section{Dimensionnement des Détecteurs d'enveloppe}
+\textit{Pour dimensionner les détecteurs d'envoloppe, notre choix a été de prendre des valeurs pour que \({\tau_1} = R_{e1} \times C_{e1} > 20~\mathrm{ms}\). Sachant que tous les détecteurs d'enveloppe ont des valeurs égales.}
+\\
+
+Pour cela, nous avons utilisé un tableau Excel afin de comparer l’ensemble des valeurs de résistances et de condensateurs disponibles en salle de TP.
+
+\textbf{\textcolor{red}{Voir si il faut mettre les screens en annexe}}
+
+Donc nous avons pris comme valeurs : 
+\[
+\tau_1 = R_{e1} \times C_{e1} = 4,7 \times 10 = 47~\mathrm{ms}
+\]
+Avec : 
+\[
+\fbox{$R_{e1} = 4{,}7\,\mathrm{k}\Omega \quad \text{et} \quad C_{e1} = 10 \times 10^{-6}\,\mathrm{F}$}
+\]
+\\
+En conclusion, nous pouvons dire qu'un \({\tau_1} = 47~\mathrm{ms}\) est pertinent étant donné que c'est suppérieur à la durée de persistance rétinienne de l'œil humain qui est de $20~\mathrm{ms}$.
+
+
+
+\newpage
+
+\section{Dimensionnement des Résistances de référence}
+
+\textit{L'objectif est d'obtenir une tension de référence \(V_{ref}\) égale à \(2{,}5\,\mathrm{V}\), afin que le signal oscille entre \(0\,\mathrm{V}\) et \(5\,\mathrm{V}\). Pour cela, on réalise un pont diviseur de tension avec deux résistances de même valeur.}
+\\
+
+Donc on a : 
+
+\[
+\fbox{$R_{ref1} = R_{ref2} = 47\,\mathrm{k}\Omega$}
+\]
+
+\newpage
+
+\section{Dimensionnement des Boutons poussoirs}
+On a :
+\[
+I = \frac{V_{cc}}{R_B} \quad \text {et} \quad V_{cc} = 5\,\mathrm{V}
+\]
+\\
+
+\textit{\(R_{B0}\) et \(R_{B1}\) dépendent de la valeur du courant I}
+\\
+
+On fixe : 
+\[
+I = 0{,}5\,\mathrm{V} 
+\]
+Donc on a : 
+\[
+R_B = \frac{V_{cc}}{I} = \frac{5}{0,5 \times 10^{-3}} = 10 \,\mathrm{k}\Omega
+\]
+\\
+
+On peut en conclure que : 
+\[
+\fbox{$R_{B0} = R_{B1} = 10 \,\mathrm{k}\Omega$}
+\]
 \end{document}
