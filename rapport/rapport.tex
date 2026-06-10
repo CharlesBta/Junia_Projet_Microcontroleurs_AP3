@@ -114,33 +114,81 @@
 
 \chapter{Analyse fonctionnelle du circuit}
 
-\section{Analyse textuelle du circuit}
+\section{Présentation générale du circuit}
 
-Le circuit étudié correspond à une carte électronique de vumètre audio. Sa fonction est de recevoir un signal audio stéréo, de le conditionner, de l’analyser selon plusieurs bandes de fréquence, puis de commander un affichage lumineux à LEDs en fonction du niveau sonore détecté. Le montage peut être découpé en plusieurs étages fonctionnels successifs : l’entrée audio, la préamplification, la génération d’une tension de référence, le mélange des voies gauche et droite, le filtrage analogique, la détection d’enveloppe, le traitement par microcontrôleur, puis la commande des sorties lumineuses. Le schéma montre également les étages d’alimentation et de découplage nécessaires au bon fonctionnement de l’ensemble.
+Le circuit étudié correspond à une carte électronique de vumètre audio. Sa fonction est de recevoir un signal audio stéréo, de le filtrer, de l’analyser selon plusieurs bandes de fréquence, puis de faire allumer des LEDs en fonction du niveau sonore détecté. Le montage peut être découpé en plusieurs parties : l’entrée audio, la préamplification, la génération d’une tension de référence, le mélange des entrées droite et gauche, le filtrage analogique, la détection d’enveloppe, le traitement par microcontrôleur, puis la commande des LEDs, et de la matrice LED.
 
-Le signal audio entre dans la carte par le connecteur jack d’entrée \texttt{J\_JACK\_IN1}. Ce connecteur permet de récupérer les deux voies d’un signal audio stéréo : la voie droite, notée \texttt{AUDIO\_R}, et la voie gauche, notée \texttt{AUDIO\_L}. Ces deux signaux sont ensuite dirigés vers les premiers étages analogiques du montage. Comme un signal audio est un signal alternatif, il peut naturellement prendre des valeurs positives et négatives. Or, la carte est alimentée uniquement entre \(+5\,\mathrm{V}\) et \(\mathrm{GND}\). Il est donc nécessaire d’adapter ce signal pour qu’il reste compatible avec les composants alimentés en simple alimentation, notamment les amplificateurs opérationnels et le microcontrôleur.
+\section{Entrée du signal audio}
 
-Avant d’être exploité, le signal audio est traité par des étages de préamplification réalisés autour d’amplificateurs opérationnels \texttt{MCP6274}. Les deux voies audio passent notamment par les amplificateurs \texttt{OPA1D} pour la voie droite et \texttt{OPA1C} pour la voie gauche. Ces étages permettent d’adapter le niveau du signal audio et de fournir un signal plus exploitable pour les blocs suivants. Les résistances de contre-réaction, comme \texttt{Rpre1} et \texttt{Rpre3}, participent à la définition du gain de ces amplificateurs. L’objectif de cette partie n’est pas seulement d’amplifier le signal, mais aussi de l’amener dans une plage de tension correcte pour la suite du traitement analogique.
+Le signal audio entre dans la carte par le connecteur jack d’entrée \texttt{J\_JACK\_IN1}. Ce connecteur permet de récupérer les deux voies d’un signal audio stéréo : la voie droite, notée \texttt{AUDIO\_R}, et la voie gauche, notée \texttt{AUDIO\_L}. Ces deux signaux sont ensuite dirigés vers les premiers étapes analogiques du montage.
 
-Pour permettre ce traitement avec une alimentation simple, le montage crée une tension de référence appelée \texttt{Vref}. Cette tension est obtenue à partir d’un pont diviseur de tension constitué notamment de \texttt{Rref1} et \texttt{Rref2}, puis elle est stabilisée par un amplificateur opérationnel monté en suiveur. Cette tension de référence joue le rôle de masse virtuelle. Elle permet de centrer les signaux audio autour d’une valeur intermédiaire, probablement proche de \(2{,}5\,\mathrm{V}\), au lieu de les centrer autour de \(0\,\mathrm{V}\). Ainsi, les alternances négatives du signal audio sont translatées dans le domaine positif, ce qui permet au microcontrôleur de les mesurer sans recevoir de tension négative.
+Comme un signal audio est un signal alternatif, il peut naturellement prendre des valeurs positives et négatives. Or, la carte est alimentée uniquement entre \(+5\,\mathrm{V}\) et \(\mathrm{GND}\). Il est donc nécessaire d’adapter ce signal pour qu’il reste compatible avec les composants alimentés en simple alimentation, notamment les amplificateurs opérationnels (AOP) et le microcontrôleur.
 
-Après préamplification, les deux voies audio gauche et droite sont regroupées dans un étage de mélange. Les signaux \texttt{OUT\_PREAMP\_L} et \texttt{OUT\_PREAMP\_R} arrivent sur un montage réalisé autour de l’amplificateur \texttt{OPA1B}. À travers plusieurs résistances d’entrée, les deux signaux sont additionnés pour former un signal unique appelé \texttt{OUT\_MIX}. Cet étage transforme donc le signal stéréo en signal mono. Cette opération est logique dans le cadre d’un vumètre, car l’objectif n’est pas de restituer séparément les deux canaux audio, mais de produire une représentation lumineuse globale du niveau sonore.
+\section{Préamplification des voies audio}
 
-Le signal mélangé \texttt{OUT\_MIX} est ensuite envoyé vers plusieurs filtres analogiques. Le schéma présente quatre sorties filtrées : \texttt{OUT\_FILTER1}, \texttt{OUT\_FILTER2}, \texttt{OUT\_FILTER3} et \texttt{OUT\_FILTER4}. Ces filtres sont réalisés à l’aide d’amplificateurs opérationnels, de résistances et de condensateurs. Leur rôle est de séparer le signal audio en différentes bandes de fréquence. Chaque filtre extrait donc une partie spécifique du signal : par exemple une bande correspondant aux basses fréquences, une autre aux fréquences intermédiaires, et d’autres aux fréquences plus élevées. Les valeurs des résistances et des condensateurs déterminent les fréquences de coupure de chaque filtre. Grâce à cet étage, le vumètre peut réagir différemment selon le contenu fréquentiel du signal audio, plutôt que d’afficher uniquement un niveau sonore global.
+Avant d’être utilisé, le signal audio est traité par une étape de préamplification réalisée autour d’AOP \texttt{MCP6274}. Les deux voies audio passent notamment par les amplificateurs \texttt{OPA1D} pour la voie droite et \texttt{OPA1C} pour la voie gauche.
 
-Les sorties des filtres sont ensuite envoyées vers des détecteurs d’enveloppe. Ces détecteurs sont réalisés avec des diodes \texttt{1N4148}, des résistances et des condensateurs. On obtient alors les signaux \texttt{OUT\_ENV\_1}, \texttt{OUT\_ENV\_2}, \texttt{OUT\_ENV\_3} et \texttt{OUT\_ENV\_4}. Le rôle d’un détecteur d’enveloppe est de transformer un signal audio alternatif rapide en une tension plus lente, représentative de son amplitude. La diode permet de redresser le signal, le condensateur se charge lors des pics de tension, puis se décharge progressivement dans la résistance. La tension obtenue varie donc en fonction du niveau sonore de la bande de fréquence considérée. Cet étage est indispensable, car le microcontrôleur ne doit pas nécessairement analyser directement toutes les oscillations rapides du signal audio : il lui suffit de mesurer une tension représentative du niveau moyen ou crête de chaque bande.
+Ces étages permettent d’adapter le niveau du signal audio et de fournir un signal plus exploitable pour les blocs suivants. Les résistances de contre-réaction, telles que \texttt{Rpre1} et \texttt{Rpre3}, contribuent à fixer le gain de ces amplificateurs. Cette étape ne vise pas uniquement à amplifier le signal, mais également à l’adapter à une plage de tension appropriée pour les traitements analogiques.
 
-Les tensions issues des détecteurs d’enveloppe sont ensuite appliquées aux entrées analogiques du microcontrôleur \texttt{PIC18F25K40}. Le microcontrôleur réalise la conversion analogique-numérique des signaux \texttt{OUT\_ENV\_1} à \texttt{OUT\_ENV\_4}. Il transforme donc les niveaux de tension en valeurs numériques exploitables par programme. À partir de ces mesures, il peut déterminer l’intensité sonore présente dans chaque bande de fréquence et décider du nombre de LEDs à allumer. Le traitement réalisé par le microcontrôleur permet également d’adapter le comportement de l’affichage : seuils d’allumage, dynamique de réponse, gestion des colonnes ou lignes de la matrice, et éventuellement modes de test.
+\section{Génération de la tension de référence}
 
-La carte possède plusieurs sorties lumineuses. Une première série correspond aux LEDs de test, nommées \texttt{LED\_0} à \texttt{LED\_7} sur le schéma. Ces LEDs permettent de visualiser directement certains états logiques ou niveaux de sortie du microcontrôleur. Elles sont utiles pour vérifier le bon fonctionnement du programme et du circuit pendant les phases de test. Une seconde sortie est dédiée à la matrice de LEDs, via le connecteur \texttt{J4}, associé aux signaux de commande de la matrice. Cette matrice constitue l’affichage principal du vumètre. Elle reçoit les commandes issues du microcontrôleur et permet de représenter visuellement le niveau sonore détecté.
+Pour permettre ce traitement avec une alimentation simple, le montage crée une tension de référence appelée \texttt{Vref}. Cette tension est obtenue à partir d’un pont diviseur de tension constitué notamment de \texttt{Rref1} et \texttt{Rref2}, puis elle est stabilisée par un AOP monté en suiveur.
 
-Le circuit conserve également une sortie audio via le connecteur \texttt{J\_JACK\_OUT1}. Cette sortie permet de récupérer le signal audio après passage par la carte. Elle permet donc de faire transiter le signal audio dans le montage tout en réalisant l’analyse nécessaire au vumètre. La carte ne se contente donc pas de mesurer le signal : elle s’insère dans une chaîne audio en proposant une entrée et une sortie.
+Cette tension de référence joue le rôle de masse virtuelle. Elle permet de centrer les signaux audio autour d’une valeur intermédiaire de \(2{,}5\,\mathrm{V}\), au lieu de les centrer autour de \(0\,\mathrm{V}\). Ainsi, la tension oscille entre \(0\,\mathrm{V}\) et \(5\,\mathrm{V}\), ce qui permet au microcontrôleur de les mesurer sans recevoir de tension négative.
+\newpage
+\section{Mélange des voies gauche et droite}
 
-L’alimentation de la carte est assurée par une tension \(+5\,\mathrm{V}\) et une masse \(\mathrm{GND}\), amenées par le connecteur d’alimentation \texttt{J\_ALIM1}. Plusieurs condensateurs de découplage sont placés à proximité des différents blocs du montage, comme \texttt{CdecOPA1}, \texttt{CdecOPA2}, \texttt{CdecMCU1} ou \texttt{CdecMATRIX1}. Leur rôle est de stabiliser localement l’alimentation et de limiter les perturbations électriques. Ils permettent notamment d’absorber les variations rapides de courant provoquées par les amplificateurs opérationnels, le microcontrôleur ou l’allumage des LEDs. Ces condensateurs sont importants pour éviter les parasites, les instabilités et les erreurs de mesure sur les signaux analogiques.
+Après préamplification, les deux voies audio gauche et droite sont regroupées dans un étage de mélange. Les signaux \texttt{OUT\_PREAMP\_L} et \texttt{OUT\_PREAMP\_R} arrivent sur un montage réalisé autour de l’amplificateur \texttt{OPA1B}. À travers plusieurs résistances d’entrée, les deux signaux sont additionnés pour former un signal unique appelé \texttt{OUT\_MIX}.
 
-Enfin, le connecteur \texttt{J3} correspond au connecteur de programmation du microcontrôleur. Il permet de programmer le \texttt{PIC18F25K40} sans le retirer de la carte. Ce connecteur donne accès aux lignes nécessaires à la programmation, notamment l’alimentation, la masse et les broches de communication dédiées. Il ne participe pas directement au traitement du signal audio, mais il est indispensable pour charger le programme dans le microcontrôleur et modifier son comportement.
+Cet étage transforme donc le signal stéréo en signal mono. Cette opération est pertinente dans le cadre d’un vumètre, puisque l’objectif n’est pas de reproduire distinctement les deux canaux audio, mais de fournir une indication lumineuse globale du niveau sonore.
 
-En résumé, le fonctionnement global du circuit est le suivant : le signal audio stéréo entre sur la carte, les voies gauche et droite sont préamplifiées puis mélangées en un signal mono. Ce signal est ensuite séparé en plusieurs bandes de fréquence par des filtres analogiques. Chaque signal filtré est transformé par un détecteur d’enveloppe en une tension continue proportionnelle au niveau sonore de la bande correspondante. Ces tensions sont lues par le microcontrôleur, qui les convertit en valeurs numériques et pilote ensuite les LEDs de test ainsi que la matrice de LEDs. L’ensemble du circuit est alimenté en \(+5\,\mathrm{V}\), avec des condensateurs de découplage assurant la stabilité électrique du montage.
+\section{Filtrage analogique du signal}
+
+Le signal mélangé \texttt{OUT\_MIX} est ensuite envoyé vers plusieurs filtres analogiques. Ces filtres sont réalisés à l’aide d’AOP, de résistances et de condensateurs. Le schéma présente quatre sorties filtrées : \texttt{OUT\_FILTER1}, \texttt{OUT\_FILTER2}, \texttt{OUT\_FILTER3} et \texttt{OUT\_FILTER4}. 
+
+Leur rôle est de séparer le signal audio en différentes bandes de fréquence. Chaque filtre extrait donc une partie spécifique du signal : par exemple une bande correspondant aux basses fréquences, une autre aux fréquences intermédiaires, et d’autres aux fréquences plus élevées. Les valeurs des résistances et des condensateurs déterminent les fréquences de coupure de chaque filtre. Grâce à cette étape, le vumètre peut réagir différemment selon les fréquences du signal audio, plutôt que d’afficher uniquement un niveau sonore global.
+
+\section{Détection d’enveloppe}
+
+Les sorties des filtres sont ensuite envoyées vers des détecteurs d’enveloppe. Ces détecteurs sont réalisés avec des diodes \texttt{1N4148}, des résistances et des condensateurs. On obtient alors les sorties \texttt{OUT\_ENV\_1}, \texttt{OUT\_ENV\_2}, \texttt{OUT\_ENV\_3} et \texttt{OUT\_ENV\_4}.
+
+Le détecteur d’enveloppe transforme le signal audio alternatif en une tension plus lente, représentative de son amplitude. La diode redresse le signal, tandis que le condensateur se charge aux pics de tension puis se décharge progressivement dans la résistance parallèle.
+
+La vitesse de décharge dépend de la constante de temps RC. Celle-ci doit être suffisamment grande pour que la tension ne redescende pas trop vite entre deux variations du signal. Ainsi, les LEDs restent allumées assez longtemps pour éviter un effet de clignotement visible par l’œil humain.
+
+\section{Traitement par le microcontrôleur}
+
+Les tensions issues des détecteurs d’enveloppe sont ensuite appliquées aux entrées analogiques du microcontrôleur \texttt{PIC18F25K40}. Le microcontrôleur réalise la conversion analogique-numérique des signaux \texttt{OUT\_ENV\_1} à \texttt{OUT\_ENV\_4}. Il transforme donc les niveaux de tension en valeurs numériques exploitables par programme.
+
+À partir de ces mesures, il peut déterminer l’intensité sonore présente dans chaque bande de fréquence et décider du nombre de LEDs à allumer. Le traitement réalisé par le microcontrôleur permet également d’adapter le comportement de l’affichage : seuils d’allumage, dynamique de réponse, gestion des colonnes ou lignes de la matrice, et éventuellement modes de test.
+
+\section{Commande des sorties lumineuses}
+
+La carte possède plusieurs sorties lumineuses. Une première série correspond aux LEDs de test, nommées \texttt{LED\_0} à \texttt{LED\_7} sur le schéma. Ces LEDs permettent de visualiser directement certains états logiques ou niveaux de sortie du microcontrôleur. Elles sont utiles pour vérifier le bon fonctionnement du programme et du circuit pendant les phases de test.
+
+Une seconde sortie est dédiée à la matrice de LEDs, via le connecteur \texttt{J4 / Conn\_LEDMATRIX}. Cette matrice constitue l’affichage principal du vumètre. Elle reçoit les commandes issues du microcontrôleur et permet de représenter visuellement le niveau sonore détecté.
+
+\section{Sortie audio}
+
+Le circuit conserve également une sortie audio via le connecteur \texttt{J\_JACK\_OUT1}. Cette sortie permet de récupérer le signal audio après passage par la carte. Elle permet donc au signal audio de traverser le montage tout en réalisant l’analyse nécessaire au vumètre. La carte ne se limite pas à la mesure du signal : elle s’intègre dans une chaîne audio grâce à une entrée et une sortie audio.
+
+\section{Alimentation et découplage}
+
+L’alimentation de la carte est assurée par une tension \(+5\,\mathrm{V}\) et une masse \(\mathrm{GND}\), amenées par le connecteur d’alimentation \texttt{J\_ALIM1}. Plusieurs condensateurs de découplage sont placés à proximité des différents blocs du montage, comme \texttt{CdecOPA1}, \texttt{CdecOPA2}, \texttt{CdecMCU1} ou \texttt{CdecMATRIX1}.
+
+Leur rôle est de maintenir une alimentation stable au plus près des composants et de réduire les perturbations électriques. Ils absorbent notamment les variations rapides de courant provoquées par les AOP, le microcontrôleur ou les LEDs. Ces condensateurs permettent ainsi de limiter les parasites, d’éviter les instabilités et d’améliorer la fiabilité des mesures analogiques.
+
+\section{Connecteur de programmation}
+
+Enfin, le connecteur \texttt{J3} correspond au connecteur de programmation du microcontrôleur. Il permet de programmer le \texttt{PIC18F25K40} sans le retirer de la carte. Ce connecteur donne accès aux voies nécessaires à la programmation, notamment l’alimentation, la masse et les broches de communication dédiées.
+
+Il ne participe pas directement au traitement du signal audio, mais il est indispensable pour charger le programme dans le microcontrôleur et modifier son comportement.
+
+\section{Synthèse du fonctionnement}
+
+En résumé, le fonctionnement global du circuit est le suivant : le signal audio stéréo entre sur la carte, les voies gauche et droite sont préamplifiées puis mélangées en un signal mono. Ce signal est ensuite séparé en plusieurs bandes de fréquence par des filtres analogiques. Chaque signal filtré est transformé par un détecteur d’enveloppe en une tension proportionnelle au niveau sonore de la bande correspondante.
+
+Ces tensions sont lues par le microcontrôleur, qui les convertit en valeurs numériques et pilote ensuite les LEDs de test ainsi que la matrice de LEDs. L’ensemble du circuit est alimenté en \(+5\,\mathrm{V}\).
 
 \newpage
 
