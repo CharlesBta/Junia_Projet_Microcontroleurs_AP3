@@ -629,97 +629,77 @@ Les broches sont configurées de la façon suivante :
 
 Les registres \texttt{ANSELx} permettent de choisir les broches analogiques. Les registres \texttt{TRISx} quand à eux permettent de choisir le sens des broches. On initialise également les registres \texttt{LATx} à 0 afin que les LEDs restent éteintes pendant le démarrage.
 
+`
 \section{Configuration et lecture de l'ADC}
 
-L'ADC utilise \(V_{DD}\) et \(V_{SS}\) comme références, soit une plage de mesure comprise entre \(0\,\mathrm{V}\) et \(5\,\mathrm{V}\). Le résultat est codé sur 10 bits, donc une mesure peut prendre une valeur comprise entre 0 et 1023.
+L'ADC utilise \(V_{DD}\) et \(V_{SS}\) comme références. Avec une alimentation
+de \(5\,\mathrm{V}\) et une conversion sur 10 bits, une unité ADC représente
+environ \(4{,}88\,\mathrm{mV}\).
 
-La résolution théorique de l'ADC est donc :
-\[
-q = \frac{5}{1023} \approx 4{,}89\,\mathrm{mV}
-\]
+L'horloge de conversion est réglée à \(F_{OSC}/64\), soit un temps
+\(T_{AD}=1\,\mu\mathrm{s}\). Le temps d'acquisition est fixé à
+\(8\,T_{AD}\). Après chaque changement de canal, un délai supplémentaire de
+\(5\,\mu\mathrm{s}\) permet à l'entrée de se stabiliser avant la conversion.
 
-On utilise une horloge ADC égale à \(F_{OSC}/64\). Avec \(F_{OSC}=64\,\mathrm{MHz}\), on obtient :
-\[
-F_{ADC} = \frac{64 \times 10^6}{64} = 1\,\mathrm{MHz}
-\]
-\[
-T_{AD} = 1\,\mu\mathrm{s}
-\]
-
-Le temps d'acquisition est réglé à \(8\,T_{AD}\), soit \(8\,\mu\mathrm{s}\). Avant chaque conversion, le canal est sélectionné avec le registre \texttt{ADPCH}, puis le programme attend \(5\,\mu\mathrm{s}\) avant de lancer la conversion.
-
-Les canaux sont rangés dans un tableau afin de parcourir les quatre bandes avec une boucle :
+Les quatre canaux sont rangés dans un tableau afin de parcourir les bandes
+avec une boucle :
 
 \begin{lstlisting}[language=C]
 static const uint8_t CANAL_ADC[4] = {5u, 4u, 3u, 2u};
 \end{lstlisting}
 
-L'ordre va de \texttt{ENV1}, correspondant aux graves, jusqu'à \texttt{ENV4}, correspondant aux aigus. Pour réduire les variations de mesure, on réalise une moyenne de quatre conversions pour chaque bande.
+L'ordre va de \texttt{ENV1}, correspondant aux graves, à \texttt{ENV4},
+correspondant aux aigus. Quatre conversions sont moyennées pour chaque bande
+afin de réduire les variations de mesure tout en conservant un affichage
+réactif.
 
+`
 \section{Calibration du niveau de repos}
 
-Les détecteurs d'enveloppe peuvent présenter une tension résiduelle même lorsqu'aucun signal audio n'est appliqué. Si cette valeur n'est pas retirée, des LEDs peuvent rester allumées sans musique.
+Les détecteurs d'enveloppe peuvent fournir une faible tension résiduelle en
+l'absence de signal audio. Sans correction, cette tension pourrait provoquer
+l'allumage permanent de certaines LEDs.
 
-Au démarrage, le programme attend \(250\,\mathrm{ms}\) afin de laisser la partie analogique se stabiliser. Il réalise ensuite 32 mesures sur chaque bande et calcule leur moyenne :
-\[
-Z_b = \frac{1}{32}\sum_{i=1}^{32} M_{b,i}
-\]
+Après un délai de stabilisation de \(250\,\mathrm{ms}\), le programme effectue
+32 mesures sur chaque bande et en calcule la moyenne. Cette valeur devient le
+niveau de repos propre à chaque entrée. Le choix de plusieurs mesures limite
+l'influence du bruit sans ralentir sensiblement le démarrage.
 
-Avec :
-\begin{itemize}
-    \item \(Z_b\) : niveau de repos de la bande \(b\) ;
-    \item \(M_{b,i}\) : mesure numéro \(i\) de la bande \(b\).
-\end{itemize}
+Pendant la calibration, la LED principale et les LEDs de test sont éteintes.
+La LED principale s'allume lorsque l'opération est terminée. Le bouton relié
+à \texttt{RA7} permet de recommencer la calibration ; un délai de
+\(30\,\mathrm{ms}\) assure un anti-rebond simple.
 
-Pendant la calibration, la LED principale et les LEDs de test sont éteintes. Une fois la calibration terminée, la LED principale s'allume. Le bouton relié à \texttt{RA7} permet de refaire cette calibration. Un délai de \(30\,\mathrm{ms}\) est utilisé pour éviter les rebonds du bouton.
+La calibration doit être réalisée sans signal audio, sinon une partie du
+signal serait considérée comme le niveau de repos.
 
-Cette étape doit être réalisée sans signal audio, sinon le programme considère une partie du signal comme étant le niveau de repos.
-
+`
 \section{Calcul de la hauteur des barres}
 
-Pour chaque bande, le programme retire le niveau de repos et une marge de bruit de 12 points ADC. Cette marge correspond environ à :
-\[
-V_{bruit} = 12 \times \frac{5}{1023} \approx 59\,\mathrm{mV}
-\]
+Pour chaque bande, le programme retire le niveau de repos mesuré pendant la
+calibration. Une marge supplémentaire de 12 points ADC permet d'ignorer les
+faibles fluctuations dues au bruit.
 
-Si la mesure ne dépasse pas cette marge, aucune LED n'est allumée. Sinon, la valeur est convertie en une hauteur comprise entre 1 et 8. On utilise une plage d'affichage de 550 points ADC, soit environ :
-\[
-V_{plage} = 550 \times \frac{5}{1023} \approx 2{,}69\,\mathrm{V}
-\]
+La valeur restante est convertie linéairement en une hauteur comprise entre
+0 et 8 LEDs. La pleine hauteur est atteinte pour une variation de 550 points
+ADC. Les constantes \texttt{MARGE\_BRUIT} et \texttt{PLAGE\_AFFICHAGE}
+permettent ainsi de régler respectivement le seuil d'allumage et la
+sensibilité de l'affichage.
 
-Le calcul réalisé peut être résumé par :
-\[
-h_b =
-\begin{cases}
-0 & \text{si } M_b \leq Z_b + 12 \\
-\min\left(8,\left\lfloor
-\dfrac{(M_b-Z_b-12)\times 8}{550}
-\right\rfloor+1\right) & \text{sinon}
-\end{cases}
-\]
+Lorsque le niveau augmente, la nouvelle hauteur est affichée immédiatement.
+Lorsqu'il diminue, la barre descend seulement d'une LED à chaque tour de
+boucle. Ce choix permet de conserver une réponse rapide à la montée tout en
+rendant la descente plus progressive et plus lisible.
 
-Avec :
-\begin{itemize}
-    \item \(M_b\) : mesure moyenne de la bande \(b\) ;
-    \item \(Z_b\) : niveau de repos obtenu pendant la calibration ;
-    \item \(h_b\) : nombre de LEDs à allumer pour cette bande.
-\end{itemize}
-
-Lorsque le niveau augmente, la nouvelle hauteur est affichée directement. Lorsque le niveau diminue, la hauteur descend seulement d'une LED à chaque tour de boucle. Cela donne une montée rapide et une descente plus progressive.
-
+`
 \section{Affichage sur les LEDs de test}
 
-Les huit LEDs du port C affichent le niveau maximal parmi les quatre bandes. Pour une hauteur \(h\), le programme allume les \(h\) bits de poids faible :
-\[
-LATC = 2^h - 1
-\]
+Les huit LEDs du port C affichent la hauteur de la bande possédant le niveau
+le plus élevé. Pour une hauteur donnée, le programme allume le même nombre
+de LEDs en partant du bas.
 
-Par exemple, pour une hauteur égale à 5 :
-\[
-LATC = 2^5 - 1 = 31 = \mathtt{00011111}_2
-\]
-
-Cette partie permet de vérifier rapidement la lecture de l'ADC et le calcul des niveaux, même lorsque la matrice n'est pas connectée.
+Cet affichage permet de vérifier rapidement l'acquisition ADC et le calcul
+des niveaux, même lorsque la matrice n'est pas connectée.
 
 \section{Création de l'affichage de la matrice}
 
