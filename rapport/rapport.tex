@@ -818,7 +818,7 @@ La trame dure environ \(2{,}56\,\mathrm{ms}\), puis le programme attend \(20\,\m
 \section{Validation de la commande de la matrice}
 
 Le signal de commande de la matrice a été observé à l'oscilloscope sur la
-broche \texttt{RB5}. L'oscillogramme permet de distinguer les impulsions
+broche \texttt{RB5} (voir figure \ref{fig:commande_matrice}). L'oscillogramme permet de distinguer les impulsions
 correspondant aux bits 0 et 1. La largeur de l'état haut est plus courte pour
 un bit à 0 que pour un bit à 1, tandis que la période totale reste proche de
 \(1{,}25\,\mu\mathrm{s}\).
@@ -840,10 +840,11 @@ par la matrice SK6812RGBW.
 \section{Validation des détecteurs d'enveloppe}
 
 Les sorties des détecteurs d'enveloppe ont également été observées à
-l'oscilloscope. La tension obtenue suit les variations d'amplitude du signal
+l'oscilloscope (voir figure \ref{fig:detecteurs_enveloppe}). La tension obtenue suit les variations d'amplitude du signal
 audio sans reproduire ses oscillations rapides. Le condensateur se charge
 lorsque l'amplitude augmente, puis se décharge progressivement à travers la
 résistance.
+Dans un soucis de lisibilité, la sinusoïde jaune a etait inversée car elle passe par un filtre inverseur.
 
  \begin{figure}[htbp]
      \centering
