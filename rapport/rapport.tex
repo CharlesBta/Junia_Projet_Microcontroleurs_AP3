@@ -119,79 +119,81 @@
 
 \section{Présentation générale du circuit}
 
-Le circuit étudié correspond à une carte électronique de vumètre audio. Sa fonction est de recevoir un signal audio stéréo, de le filtrer, de l’analyser selon plusieurs bandes de fréquence, puis de faire allumer des LEDs en fonction du niveau sonore détecté. Le montage peut être découpé en plusieurs parties : l’entrée audio, la préamplification, la génération d’une tension de référence, le mélange des entrées droite et gauche, le filtrage analogique, la détection d’enveloppe, le traitement par microcontrôleur, puis la commande des LEDs, et de la matrice LED.
+Le circuit étudié correspond à une carte électronique de vumètre audio. Sa fonction est de recevoir un signal audio stéréo, de le filtrer, de l'analyser selon plusieurs bandes de fréquence, puis de faire allumer des LEDs en fonction du niveau sonore détecté. Le montage peut être découpé en plusieurs parties : l'entrée audio, la préamplification, la génération d'une tension de référence, le mélange des entrées droite et gauche, le filtrage analogique, la détection d'enveloppe, le traitement par microcontrôleur, puis la commande des LEDs, et de la matrice LED.
 
 \section{Entrée du signal audio}
 
-Le signal audio entre dans la carte par le connecteur jack d’entrée \texttt{J\_JACK\_IN1}. Ce connecteur permet de récupérer les deux voies d’un signal audio stéréo : la voie droite, notée \texttt{AUDIO\_R}, et la voie gauche, notée \texttt{AUDIO\_L}. Ces deux signaux sont ensuite dirigés vers les premiers étapes analogiques du montage.
+Le signal audio entre dans la carte par le connecteur jack d'entrée \texttt{J\_JACK\_IN1}. Ce connecteur permet de récupérer les deux voies d'un signal audio stéréo : la voie droite, notée \texttt{AUDIO\_R}, et la voie gauche, notée \texttt{AUDIO\_L}. Ces deux signaux sont ensuite dirigés vers les premiers étapes analogiques du montage.
 
-Comme un signal audio est un signal alternatif, il peut naturellement prendre des valeurs positives et négatives. Or, la carte est alimentée uniquement entre \(+5\,\mathrm{V}\) et \(\mathrm{GND}\). Il est donc nécessaire d’adapter ce signal pour qu’il reste compatible avec les composants alimentés en simple alimentation, notamment les amplificateurs opérationnels (AOP) et le microcontrôleur.
+Comme un signal audio est un signal alternatif, il peut naturellement prendre des valeurs positives et négatives. Or, la carte est alimentée uniquement entre \(+5\,\mathrm{V}\) et \(\mathrm{GND}\). Il est donc nécessaire d'adapter ce signal pour qu'il reste compatible avec les composants alimentés en simple alimentation, notamment les amplificateurs opérationnels (AOP) et le microcontrôleur.
 
 \section{Préamplification des voies audio}
 
-Avant d’être utilisé, le signal audio est traité par une étape de préamplification réalisée autour d’AOP \texttt{MCP6274}. Les deux voies audio passent notamment par les amplificateurs \texttt{OPA1D} pour la voie droite et \texttt{OPA1C} pour la voie gauche.
+Avant d'être utilisé, le signal audio est traité par une étape de préamplification réalisée autour d'AOP \texttt{MCP6274}. Les deux voies audio passent notamment par les amplificateurs \texttt{OPA1D} pour la voie droite et \texttt{OPA1C} pour la voie gauche.
 
-Ces étages permettent d’adapter le niveau du signal audio et de fournir un signal plus exploitable pour les blocs suivants. Les résistances de contre-réaction, telles que \texttt{Rpre1} et \texttt{Rpre3}, contribuent à fixer le gain de ces amplificateurs. Cette étape ne vise pas uniquement à amplifier le signal, mais également à l’adapter à une plage de tension appropriée pour les traitements analogiques.
+Ces étages permettent d'adapter le niveau du signal audio et de fournir un signal plus exploitable pour les blocs suivants. Les résistances de contre-réaction, telles que \texttt{Rpre1} et \texttt{Rpre3}, contribuent à fixer le gain de ces amplificateurs. Cette étape ne vise pas uniquement à amplifier le signal, mais également à l'adapter à une plage de tension appropriée pour les traitements analogiques.
 
 \section{Génération de la tension de référence}
 
-Pour permettre ce traitement avec une alimentation simple, le montage crée une tension de référence appelée \texttt{Vref}. Cette tension est obtenue à partir d’un pont diviseur de tension constitué notamment de \texttt{Rref1} et \texttt{Rref2}, puis elle est stabilisée par un AOP monté en suiveur.
+Pour permettre ce traitement avec une alimentation simple, le montage crée une tension de référence appelée \texttt{Vref}. Cette tension est obtenue à partir d'un pont diviseur de tension constitué notamment de \texttt{Rref1} et \texttt{Rref2}, puis elle est stabilisée par un AOP monté en suiveur.
 
-Cette tension de référence joue le rôle de masse virtuelle. Elle permet de centrer les signaux audio autour d’une valeur intermédiaire de \(2{,}5\,\mathrm{V}\), au lieu de les centrer autour de \(0\,\mathrm{V}\). Ainsi, la tension oscille entre \(0\,\mathrm{V}\) et \(5\,\mathrm{V}\), ce qui permet au microcontrôleur de les mesurer sans recevoir de tension négative.
+Cette tension de référence joue le rôle de masse virtuelle. Elle permet de centrer les signaux audio autour d'une valeur intermédiaire de \(2{,}5\,\mathrm{V}\), au lieu de les centrer autour de \(0\,\mathrm{V}\). Ainsi, la tension oscille entre \(0\,\mathrm{V}\) et \(5\,\mathrm{V}\), ce qui permet au microcontrôleur de les mesurer sans recevoir de tension négative.
 \newpage
 \section{Mélange des voies gauche et droite}
 
-Après préamplification, les deux voies audio gauche et droite sont regroupées dans un étage de mélange. Les signaux \texttt{OUT\_PREAMP\_L} et \texttt{OUT\_PREAMP\_R} arrivent sur un montage réalisé autour de l’amplificateur \texttt{OPA1B}. À travers plusieurs résistances d’entrée, les deux signaux sont additionnés pour former un signal unique appelé \texttt{OUT\_MIX}.
+Après préamplification, les deux voies audio gauche et droite sont regroupées dans un étage de mélange. Les signaux \texttt{OUT\_PREAMP\_L} et \texttt{OUT\_PREAMP\_R} arrivent sur un montage réalisé autour de l'amplificateur \texttt{OPA1B}. À travers plusieurs résistances d'entrée, les deux signaux sont additionnés pour former un signal unique appelé \texttt{OUT\_MIX}.
 
-Cet étage transforme donc le signal stéréo en signal mono. Cette opération est pertinente dans le cadre d’un vumètre, puisque l’objectif n’est pas de reproduire distinctement les deux canaux audio, mais de fournir une indication lumineuse globale du niveau sonore.
+Cet étage transforme donc le signal stéréo en signal mono. Cette opération est pertinente dans le cadre d'un vumètre, puisque l'objectif n'est pas de reproduire distinctement les deux canaux audio, mais de fournir une indication lumineuse globale du niveau sonore.
 
 \section{Filtrage analogique du signal}
 
-Le signal mélangé \texttt{OUT\_MIX} est ensuite envoyé vers plusieurs filtres analogiques. Ces filtres sont réalisés à l’aide d’AOP, de résistances et de condensateurs. Le schéma présente quatre sorties filtrées : \texttt{OUT\_FILTER1}, \texttt{OUT\_FILTER2}, \texttt{OUT\_FILTER3} et \texttt{OUT\_FILTER4}. 
+Le signal mélangé \texttt{OUT\_MIX} est ensuite envoyé vers plusieurs filtres analogiques. Ces filtres sont réalisés à l'aide d'AOP, de résistances et de condensateurs. Le schéma présente quatre sorties filtrées : \texttt{OUT\_FILTER1}, \texttt{OUT\_FILTER2}, \texttt{OUT\_FILTER3} et \texttt{OUT\_FILTER4}.
 
-Leur rôle est de séparer le signal audio en différentes bandes de fréquence. Chaque filtre extrait donc une partie spécifique du signal : par exemple une bande correspondant aux basses fréquences, une autre aux fréquences intermédiaires, et d’autres aux fréquences plus élevées. Les valeurs des résistances et des condensateurs déterminent les fréquences de coupure de chaque filtre. Grâce à cette étape, le vumètre peut réagir différemment selon les fréquences du signal audio, plutôt que d’afficher uniquement un niveau sonore global.
+Leur rôle est de séparer le signal audio en différentes bandes de fréquence. Chaque filtre extrait donc une partie spécifique du signal : par exemple une bande correspondant aux basses fréquences, une autre aux fréquences intermédiaires, et d'autres aux fréquences plus élevées. Les valeurs des résistances et des condensateurs déterminent les fréquences de coupure de chaque filtre. Grâce à cette étape, le vumètre peut réagir différemment selon les fréquences du signal audio, plutôt que d'afficher uniquement un niveau sonore global.
 
-\section{Détection d’enveloppe}
+\section{Détection d'enveloppe}
 
-Les sorties des filtres sont ensuite envoyées vers des détecteurs d’enveloppe. Ces détecteurs sont réalisés avec des diodes \texttt{1N4148}, des résistances et des condensateurs. On obtient alors les sorties \texttt{OUT\_ENV\_1}, \texttt{OUT\_ENV\_2}, \texttt{OUT\_ENV\_3} et \texttt{OUT\_ENV\_4}.
+Les sorties des filtres sont ensuite envoyées vers des détecteurs d'enveloppe. Ces détecteurs sont réalisés avec des diodes \texttt{1N4148}, des résistances et des condensateurs. On obtient alors les sorties \texttt{OUT\_ENV\_1}, \texttt{OUT\_ENV\_2}, \texttt{OUT\_ENV\_3} et \texttt{OUT\_ENV\_4}.
 
-Le détecteur d’enveloppe transforme le signal audio alternatif en une tension plus lente, représentative de son amplitude. La diode redresse le signal, tandis que le condensateur se charge aux pics de tension puis se décharge progressivement dans la résistance parallèle.
+Le détecteur d'enveloppe transforme le signal audio alternatif en une tension plus lente, représentative de son amplitude. La diode redresse le signal, tandis que le condensateur se charge aux pics de tension puis se décharge progressivement dans la résistance parallèle.
 
-La vitesse de décharge dépend de la constante de temps RC. Celle-ci doit être suffisamment grande pour que la tension ne redescende pas trop vite entre deux variations du signal. Ainsi, les LEDs restent allumées assez longtemps pour éviter un effet de clignotement visible par l’œil humain.
+La vitesse de décharge dépend de la constante de temps RC. Celle-ci doit être suffisamment grande pour que la tension ne redescende pas trop vite entre deux variations du signal. Ainsi, les LEDs restent allumées assez longtemps pour éviter un effet de clignotement visible par l'\oe{}il humain.
 
 \section{Traitement par le microcontrôleur}
 
-Les tensions issues des détecteurs d’enveloppe sont ensuite appliquées aux entrées analogiques du microcontrôleur \texttt{PIC18F25K40}. Le microcontrôleur réalise la conversion analogique-numérique des signaux \texttt{OUT\_ENV\_1} à \texttt{OUT\_ENV\_4}. Il transforme donc les niveaux de tension en valeurs numériques exploitables par programme.
+Les tensions issues des détecteurs d'enveloppe sont ensuite appliquées aux entrées analogiques du microcontrôleur \texttt{PIC18F25K40}. Le microcontrôleur réalise la conversion analogique-numérique des signaux \texttt{OUT\_ENV\_1} à \texttt{OUT\_ENV\_4}. Il transforme donc les niveaux de tension en valeurs numériques exploitables par programme.
 
-À partir de ces mesures, il peut déterminer l’intensité sonore présente dans chaque bande de fréquence et décider du nombre de LEDs à allumer. Le traitement réalisé par le microcontrôleur permet également d’adapter le comportement de l’affichage : seuils d’allumage, dynamique de réponse, gestion des colonnes ou lignes de la matrice, et éventuellement modes de test.
+Dans notre programme, les quatre tensions sont lues sur les entrées \texttt{AN5} à \texttt{AN2}. Une calibration est faite au démarrage afin de mesurer le niveau de repos de chaque bande. Ensuite, le programme moyenne les mesures, retire le niveau de repos et transforme le résultat en une hauteur comprise entre 0 et 8 LEDs.
+
+Les quatre bandes sont affichées sur la matrice par groupes de deux colonnes. La montée de la barre est immédiate, tandis que la descente se fait une LED à la fois afin d'obtenir un affichage plus lisible.
 
 \section{Commande des sorties lumineuses}
 
-La carte possède plusieurs sorties lumineuses. Une première série correspond aux LEDs de test, nommées \texttt{LED\_0} à \texttt{LED\_7} sur le schéma. Ces LEDs permettent de visualiser directement certains états logiques ou niveaux de sortie du microcontrôleur. Elles sont utiles pour vérifier le bon fonctionnement du programme et du circuit pendant les phases de test.
+La carte possède plusieurs sorties lumineuses. Une première série correspond aux LEDs de test, nommées \texttt{LED\_0} à \texttt{LED\_7} sur le schéma. Dans notre programme, elles affichent la hauteur de la bande qui possède le niveau le plus élevé. Elles permettent donc de vérifier le traitement des mesures sans utiliser la matrice.
 
-Une seconde sortie est dédiée à la matrice de LEDs, via le connecteur \texttt{J4 / Conn\_LEDMATRIX}. Cette matrice constitue l’affichage principal du vumètre. Elle reçoit les commandes issues du microcontrôleur et permet de représenter visuellement le niveau sonore détecté.
+Une seconde sortie est dédiée à la matrice de LEDs, via le connecteur \texttt{J4 / Conn\_LEDMATRIX}. Cette matrice constitue l'affichage principal du vumètre. Les LEDs sont vertes sur les quatre premières lignes, jaunes sur les deux suivantes puis rouges sur les deux dernières.
 
 \section{Sortie audio}
 
-Le circuit conserve également une sortie audio via le connecteur \texttt{J\_JACK\_OUT1}. Cette sortie permet de récupérer le signal audio après passage par la carte. Elle permet donc au signal audio de traverser le montage tout en réalisant l’analyse nécessaire au vumètre. La carte ne se limite pas à la mesure du signal : elle s’intègre dans une chaîne audio grâce à une entrée et une sortie audio.
+Le circuit conserve également une sortie audio via le connecteur \texttt{J\_JACK\_OUT1}. Cette sortie permet de récupérer le signal audio après passage par la carte. Elle permet donc au signal audio de traverser le montage tout en réalisant l'analyse nécessaire au vumètre. La carte ne se limite pas à la mesure du signal : elle s'intègre dans une chaîne audio grâce à une entrée et une sortie audio.
 
 \section{Alimentation et découplage}
 
-L’alimentation de la carte est assurée par une tension \(+5\,\mathrm{V}\) et une masse \(\mathrm{GND}\), amenées par le connecteur d’alimentation \texttt{J\_ALIM1}. Plusieurs condensateurs de découplage sont placés à proximité des différents blocs du montage, comme \texttt{CdecOPA1}, \texttt{CdecOPA2}, \texttt{CdecMCU1} ou \texttt{CdecMATRIX1}.
+L'alimentation de la carte est assurée par une tension \(+5\,\mathrm{V}\) et une masse \(\mathrm{GND}\), amenées par le connecteur d'alimentation \texttt{J\_ALIM1}. Plusieurs condensateurs de découplage sont placés à proximité des différents blocs du montage, comme \texttt{CdecOPA1}, \texttt{CdecOPA2}, \texttt{CdecMCU1} ou \texttt{CdecMATRIX1}.
 
-Leur rôle est de maintenir une alimentation stable au plus près des composants et de réduire les perturbations électriques. Ils absorbent notamment les variations rapides de courant provoquées par les AOP, le microcontrôleur ou les LEDs. Ces condensateurs permettent ainsi de limiter les parasites, d’éviter les instabilités et d’améliorer la fiabilité des mesures analogiques.
+Leur rôle est de maintenir une alimentation stable au plus près des composants et de réduire les perturbations électriques. Ils absorbent notamment les variations rapides de courant provoquées par les AOP, le microcontrôleur ou les LEDs. Ces condensateurs permettent ainsi de limiter les parasites, d'éviter les instabilités et d'améliorer la fiabilité des mesures analogiques.
 
 \section{Connecteur de programmation}
 
-Enfin, le connecteur \texttt{J3} correspond au connecteur de programmation du microcontrôleur. Il permet de programmer le \texttt{PIC18F25K40} sans le retirer de la carte. Ce connecteur donne accès aux voies nécessaires à la programmation, notamment l’alimentation, la masse et les broches de communication dédiées.
+Enfin, le connecteur \texttt{J3} correspond au connecteur de programmation du microcontrôleur. Il permet de programmer le \texttt{PIC18F25K40} sans le retirer de la carte. Ce connecteur donne accès aux voies nécessaires à la programmation, notamment l'alimentation, la masse et les broches de communication dédiées.
 
 Il ne participe pas directement au traitement du signal audio, mais il est indispensable pour charger le programme dans le microcontrôleur et modifier son comportement.
 
 \section{Synthèse du fonctionnement}
 
-En résumé, le fonctionnement global du circuit est le suivant : le signal audio stéréo entre sur la carte, les voies gauche et droite sont préamplifiées puis mélangées en un signal mono. Ce signal est ensuite séparé en plusieurs bandes de fréquence par des filtres analogiques. Chaque signal filtré est transformé par un détecteur d’enveloppe en une tension proportionnelle au niveau sonore de la bande correspondante.
+En résumé, le fonctionnement global du circuit est le suivant : le signal audio stéréo entre sur la carte, les voies gauche et droite sont préamplifiées puis mélangées en un signal mono. Ce signal est ensuite séparé en plusieurs bandes de fréquence par des filtres analogiques. Chaque signal filtré est transformé par un détecteur d'enveloppe en une tension proportionnelle au niveau sonore de la bande correspondante.
 
-Ces tensions sont lues par le microcontrôleur, qui les convertit en valeurs numériques et pilote ensuite les LEDs de test ainsi que la matrice de LEDs. L’ensemble du circuit est alimenté en \(+5\,\mathrm{V}\).
+Ces tensions sont lues par le microcontrôleur, qui les convertit en valeurs numériques et pilote ensuite les LEDs de test ainsi que la matrice de LEDs. L'ensemble du circuit est alimenté en \(+5\,\mathrm{V}\).
 
 \newpage
 
@@ -515,7 +517,7 @@ On prend donc pour valeurs de composants à disposition :
 \textit{Pour dimensionner les détecteurs d'envoloppe, notre choix a été de prendre des valeurs pour que \({\tau_1} = R_{e1} \times C_{e1} > 20~\mathrm{ms}\). Sachant que tous les détecteurs d'enveloppe ont des valeurs égales.}
 \\
 
-Pour cela, nous avons utilisé un tableau Excel afin de comparer l’ensemble des valeurs de résistances et de condensateurs disponibles en salle de TP : 
+Pour cela, nous avons utilisé un tableau Excel afin de comparer l'ensemble des valeurs de résistances et de condensateurs disponibles en salle de TP :
 \\
 
 \includegraphics[scale=0.22]{excel.png}
@@ -529,7 +531,7 @@ Avec :
 \fbox{$R_{e1} = 4{,}7\,\mathrm{k}\Omega \quad \text{et} \quad C_{e1} = 10 \times 10^{-6}\,\mathrm{F}$}
 \]
 \\
-En conclusion, nous pouvons dire qu'un \({\tau_1} = 47~\mathrm{ms}\) est pertinent étant donné que c'est suppérieur à la durée de persistance rétinienne de l'œil humain qui est de $20~\mathrm{ms}$.
+En conclusion, nous pouvons dire qu'un \({\tau_1} = 47~\mathrm{ms}\) est pertinent étant donné que c'est suppérieur à la durée de persistance rétinienne de l'\oe{}il humain qui est de $20~\mathrm{ms}$.
 
 \newpage
 
@@ -570,6 +572,261 @@ On peut en conclure que :
 \[
 \fbox{$R_{B0} = R_{B1} = 10 \,\mathrm{k}\Omega$}
 \]
+
+\newpage
+
+\chapter{Programmation du microcontrôleur}
+
+\section{Répartition entre le C et l'assembleur}
+
+La consigne demande d'utiliser le langage C pour la configuration du microcontrôleur, l'acquisition et le traitement des données. L'assembleur est utilisé pour la communication avec la matrice de LEDs, car le protocole impose un timing trop précis pour être réalisé simplement en C.
+
+On a donc séparé le programme en deux fichiers :
+\begin{itemize}
+    \item \texttt{main.c} contient la configuration du PIC, la lecture des quatre détecteurs d'enveloppe, le calcul des niveaux et la préparation de l'affichage ;
+    \item \texttt{tx.asm} contient la fonction \texttt{TX\_64LEDS}, qui envoie les 2048 bits de commande à la matrice.
+\end{itemize}
+
+La fonction assembleur est déclarée dans le fichier C avec le mot-clé \texttt{extern}. Le tableau qui contient les couleurs des LEDs est également partagé entre les deux langages :
+
+\begin{lstlisting}[language=C]
+extern void TX_64LEDS(void);
+
+volatile uint8_t LED_MATRIX[256];
+volatile uint8_t *pC = LED_MATRIX;
+\end{lstlisting}
+
+Du côté assembleur, le compilateur ajoute un underscore devant les noms provenant du C. On utilise donc les symboles \texttt{\_TX\_64LEDS} et \texttt{\_pC} :
+
+\begin{lstlisting}[language=MicroAsm]
+GLOBAL _TX_64LEDS
+GLOBAL _pC
+\end{lstlisting}
+
+\section{Configuration du PIC18F25K40}
+
+Le microcontrôleur fonctionne avec son oscillateur interne réglé à \(64\,\mathrm{MHz}\). Le watchdog est désactivé afin qu'il ne redémarre pas le programme pendant son fonctionnement. La fréquence est également définie par \texttt{\_XTAL\_FREQ}, ce qui permet d'utiliser les fonctions de délai du compilateur.
+
+Les broches sont configurées de la façon suivante :
+
+\begin{center}
+\begin{tabular}{|c|c|p{7.5cm}|}
+\hline
+\textbf{Broches} & \textbf{Configuration} & \textbf{Utilisation} \\
+\hline
+\texttt{RA2 à RA5} & Entrées analogiques & Lecture des quatre sorties des détecteurs d'enveloppe \\
+\hline
+\texttt{RA6 et RA7} & Entrées avec pull-up & Boutons poussoirs, avec \texttt{RA7} utilisé pour relancer la calibration \\
+\hline
+\texttt{RB4} & Sortie numérique & LED principale indiquant que la calibration est terminée \\
+\hline
+\texttt{RB5} & Sortie numérique & Signal de commande de la matrice de LEDs \\
+\hline
+\texttt{RC0 à RC7} & Sorties numériques & Commande des huit LEDs de test \\
+\hline
+\end{tabular}
+\end{center}
+
+Les registres \texttt{ANSELx} permettent de choisir les broches analogiques et les registres \texttt{TRISx} permettent de choisir le sens des broches. On initialise également les registres \texttt{LATx} à 0 afin que les LEDs restent éteintes pendant le démarrage.
+
+\section{Configuration et lecture de l'ADC}
+
+L'ADC utilise \(V_{DD}\) et \(V_{SS}\) comme références, soit une plage de mesure comprise entre \(0\,\mathrm{V}\) et \(5\,\mathrm{V}\). Le résultat est codé sur 10 bits, donc une mesure peut prendre une valeur comprise entre 0 et 1023.
+
+La résolution théorique de l'ADC est donc :
+\[
+q = \frac{5}{1023} \approx 4{,}89\,\mathrm{mV}
+\]
+
+On utilise une horloge ADC égale à \(F_{OSC}/64\). Avec \(F_{OSC}=64\,\mathrm{MHz}\), on obtient :
+\[
+F_{ADC} = \frac{64 \times 10^6}{64} = 1\,\mathrm{MHz}
+\]
+\[
+T_{AD} = 1\,\mu\mathrm{s}
+\]
+
+Le temps d'acquisition est réglé à \(8\,T_{AD}\), soit \(8\,\mu\mathrm{s}\). Avant chaque conversion, le canal est sélectionné avec le registre \texttt{ADPCH}, puis le programme attend \(5\,\mu\mathrm{s}\) avant de lancer la conversion.
+
+Les canaux sont rangés dans un tableau afin de parcourir les quatre bandes avec une boucle :
+
+\begin{lstlisting}[language=C]
+static const uint8_t CANAL_ADC[4] = {5u, 4u, 3u, 2u};
+\end{lstlisting}
+
+L'ordre va de \texttt{ENV1}, correspondant aux graves, jusqu'à \texttt{ENV4}, correspondant aux aigus. Pour réduire les variations de mesure, on réalise une moyenne de quatre conversions pour chaque bande.
+
+\section{Calibration du niveau de repos}
+
+Les détecteurs d'enveloppe peuvent présenter une tension résiduelle même lorsqu'aucun signal audio n'est appliqué. Si cette valeur n'est pas retirée, des LEDs peuvent rester allumées sans musique.
+
+Au démarrage, le programme attend \(250\,\mathrm{ms}\) afin de laisser la partie analogique se stabiliser. Il réalise ensuite 32 mesures sur chaque bande et calcule leur moyenne :
+\[
+Z_b = \frac{1}{32}\sum_{i=1}^{32} M_{b,i}
+\]
+
+Avec :
+\begin{itemize}
+    \item \(Z_b\) : niveau de repos de la bande \(b\) ;
+    \item \(M_{b,i}\) : mesure numéro \(i\) de la bande \(b\).
+\end{itemize}
+
+Pendant la calibration, la LED principale et les LEDs de test sont éteintes. Une fois la calibration terminée, la LED principale s'allume. Le bouton relié à \texttt{RA7} permet de refaire cette calibration. Un délai de \(30\,\mathrm{ms}\) est utilisé pour éviter les rebonds du bouton.
+
+Cette étape doit être réalisée sans signal audio, sinon le programme considère une partie du signal comme étant le niveau de repos.
+
+\section{Calcul de la hauteur des barres}
+
+Pour chaque bande, le programme retire le niveau de repos et une marge de bruit de 12 points ADC. Cette marge correspond environ à :
+\[
+V_{bruit} = 12 \times \frac{5}{1023} \approx 59\,\mathrm{mV}
+\]
+
+Si la mesure ne dépasse pas cette marge, aucune LED n'est allumée. Sinon, la valeur est convertie en une hauteur comprise entre 1 et 8. On utilise une plage d'affichage de 550 points ADC, soit environ :
+\[
+V_{plage} = 550 \times \frac{5}{1023} \approx 2{,}69\,\mathrm{V}
+\]
+
+Le calcul réalisé peut être résumé par :
+\[
+h_b =
+\begin{cases}
+0 & \text{si } M_b \leq Z_b + 12 \\
+\min\left(8,\left\lfloor
+\dfrac{(M_b-Z_b-12)\times 8}{550}
+\right\rfloor+1\right) & \text{sinon}
+\end{cases}
+\]
+
+Avec :
+\begin{itemize}
+    \item \(M_b\) : mesure moyenne de la bande \(b\) ;
+    \item \(Z_b\) : niveau de repos obtenu pendant la calibration ;
+    \item \(h_b\) : nombre de LEDs à allumer pour cette bande.
+\end{itemize}
+
+Lorsque le niveau augmente, la nouvelle hauteur est affichée directement. Lorsque le niveau diminue, la hauteur descend seulement d'une LED à chaque tour de boucle. Cela donne une montée rapide et une descente plus progressive.
+
+\section{Affichage sur les LEDs de test}
+
+Les huit LEDs du port C affichent le niveau maximal parmi les quatre bandes. Pour une hauteur \(h\), le programme allume les \(h\) bits de poids faible :
+\[
+LATC = 2^h - 1
+\]
+
+Par exemple, pour une hauteur égale à 5 :
+\[
+LATC = 2^5 - 1 = 31 = \mathtt{00011111}_2
+\]
+
+Cette partie permet de vérifier rapidement la lecture de l'ADC et le calcul des niveaux, même lorsque la matrice n'est pas connectée.
+
+\section{Création de l'affichage de la matrice}
+
+La matrice contient 64 LEDs RGBW. Chaque LED utilise quatre octets, dans l'ordre vert, rouge, bleu et blanc. Le tableau a donc une taille de :
+\[
+64 \times 4 = 256 \text{ octets}
+\]
+
+Les LEDs de la matrice sont câblées par colonnes. Pour une LED située à la colonne \(x\) et à la ligne \(y\), l'indice du premier octet est :
+\[
+index = (8x+y)\times 4
+\]
+
+Chaque bande de fréquence utilise deux colonnes, ce qui permet d'utiliser les huit colonnes de la matrice pour les quatre bandes.
+
+On a choisi les couleurs suivantes :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Lignes} & \textbf{Couleur} & \textbf{Octet vert} & \textbf{Octet rouge} \\
+\hline
+1 à 4 & Vert & 24 & 0 \\
+\hline
+5 et 6 & Jaune & 18 & 18 \\
+\hline
+7 et 8 & Rouge & 0 & 24 \\
+\hline
+\end{tabular}
+\end{center}
+
+Les octets bleu et blanc restent à 0. Les valeurs utilisées restent de l'ordre de quelques dizaines, comme demandé dans la consigne, afin de limiter la luminosité et le courant consommé par la matrice.
+
+\section{Envoi des données en assembleur}
+
+La fonction \texttt{TX\_64LEDS} commence par charger l'adresse du tableau dans le registre d'adressage indirect \texttt{FSR0}. Le registre \texttt{POSTINC0} permet ensuite de lire un octet et d'incrémenter automatiquement le pointeur.
+
+Le compteur d'octets est placé dans \texttt{PRODL}. Il est initialisé à 0 et l'instruction \texttt{DECFSZ} permet d'effectuer 256 tours avant de sortir de la boucle. Pour chaque octet, les bits sont envoyés du bit 7 au bit 0, donc du bit de poids fort au bit de poids faible.
+
+Le protocole de la matrice code chaque bit avec une impulsion de période \(1{,}25\,\mu\mathrm{s}\). Comme une instruction du PIC dure quatre périodes d'horloge, on a :
+\[
+T_{cycle} = \frac{4}{64 \times 10^6} = 62{,}5\,\mathrm{ns}
+\]
+
+On utilise des instructions \texttt{NOP} et des branchements afin de garder une durée totale de 20 cycles par bit :
+\[
+20 \times 62{,}5\,\mathrm{ns} = 1{,}25\,\mu\mathrm{s}
+\]
+
+Les durées théoriques obtenues avec le programme sont :
+
+\begin{center}
+\small
+\begin{tabular}{|p{2.3cm}|p{3.1cm}|p{4.1cm}|p{2.4cm}|}
+\hline
+\textbf{Bit envoyé} & \textbf{Cycles à l'état haut} & \textbf{Durée à l'état haut} & \textbf{Période} \\
+\hline
+0 & 6 cycles & \(0{,}375\,\mu\mathrm{s}\) & \(1{,}25\,\mu\mathrm{s}\) \\
+\hline
+1 & 12 à 13 cycles & \(0{,}75\) à \(0{,}8125\,\mu\mathrm{s}\) & \(1{,}25\,\mu\mathrm{s}\) \\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+
+La différence entre 12 et 13 cycles vient du dernier bit de chaque octet. Ce dernier laisse le temps de charger l'octet suivant tout en conservant une période totale constante.
+
+Une trame complète contient :
+\[
+64 \times 4 \times 8 = 2048 \text{ bits}
+\]
+
+Sa durée théorique est donc :
+\[
+T_{trame} = 2048 \times 1{,}25\,\mu\mathrm{s}
+= 2{,}56\,\mathrm{ms}
+\]
+
+Après chaque trame, le programme impose d'abord un délai de \(100\,\mu\mathrm{s}\), puis le délai principal de \(20\,\mathrm{ms}\). La ligne reste à l'état bas pendant ces délais, ce qui permet à la matrice de valider les 2048 bits reçus avant la trame suivante.
+
+\section{Boucle principale du programme}
+
+Après l'initialisation et la calibration, le programme répète les opérations suivantes :
+
+\begin{lstlisting}[language=C]
+mettre_a_jour_niveaux();
+dessiner_matrice();
+TX_64LEDS();
+
+__delay_us(100);
+__delay_ms(20);
+\end{lstlisting}
+
+La trame dure environ \(2{,}56\,\mathrm{ms}\), puis le programme attend \(20\,\mathrm{ms}\). L'affichage est donc actualisé environ 44 fois par seconde, ce qui est suffisamment rapide pour suivre les variations du signal audio sans clignotement visible.
+
+\section{Validation de la commande de la matrice}
+
+La consigne demande de vérifier le signal de commande à l'oscilloscope. Les valeurs à contrôler sur la broche \texttt{RB5} sont les suivantes :
+\begin{itemize}
+    \item une période proche de \(1{,}25\,\mu\mathrm{s}\) pour chaque bit ;
+    \item un état haut proche de \(0{,}375\,\mu\mathrm{s}\) pour un bit à 0 ;
+    \item un état haut compris entre \(0{,}75\,\mu\mathrm{s}\) et \(0{,}8125\,\mu\mathrm{s}\) pour un bit à 1 ;
+    \item une durée de trame proche de \(2{,}56\,\mathrm{ms}\) ;
+    \item un état bas d'au moins \(100\,\mu\mathrm{s}\) entre deux trames.
+\end{itemize}
+
+Ces valeurs correspondent au timing attendu par la matrice SK6812RGBW. Les oscillogrammes expérimentaux permettront de vérifier que les durées obtenues sur la carte correspondent bien aux durées calculées.
 
 \newpage
 
