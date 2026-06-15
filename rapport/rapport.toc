@@ -6,7 +6,7 @@
 \contentsline {section}{\numberline {1.4}Génération de la tension de référence}{2}{section.1.4}%
 \contentsline {section}{\numberline {1.5}Mélange des voies gauche et droite}{3}{section.1.5}%
 \contentsline {section}{\numberline {1.6}Filtrage analogique du signal}{3}{section.1.6}%
-\contentsline {section}{\numberline {1.7}Détection d’enveloppe}{3}{section.1.7}%
+\contentsline {section}{\numberline {1.7}Détection d'enveloppe}{3}{section.1.7}%
 \contentsline {section}{\numberline {1.8}Traitement par le microcontrôleur}{3}{section.1.8}%
 \contentsline {section}{\numberline {1.9}Commande des sorties lumineuses}{3}{section.1.9}%
 \contentsline {section}{\numberline {1.10}Sortie audio}{4}{section.1.10}%
@@ -24,5 +24,17 @@
 \contentsline {section}{\numberline {2.4}Dimensionnement des Détecteurs d'enveloppe}{11}{section.2.4}%
 \contentsline {section}{\numberline {2.5}Dimensionnement des Résistances de référence}{12}{section.2.5}%
 \contentsline {section}{\numberline {2.6}Dimensionnement des Boutons poussoirs}{13}{section.2.6}%
-\contentsline {chapter}{\numberline {3}Tableau récapitulatif des composants utilisés}{14}{chapter.3}%
-\contentsline {chapter}{\numberline {4}Diagramme de Bode}{16}{chapter.4}%
+\contentsline {chapter}{\numberline {3}Programmation du microcontrôleur}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Répartition entre le C et l'assembleur}{14}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Configuration du PIC18F25K40}{14}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Configuration et lecture de l'ADC}{15}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Calibration du niveau de repos}{15}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Calcul de la hauteur des barres}{15}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Affichage sur les LEDs de test}{16}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Création de l'affichage de la matrice}{16}{section.3.7}%
+\contentsline {section}{\numberline {3.8}Envoi des données en assembleur}{16}{section.3.8}%
+\contentsline {section}{\numberline {3.9}Boucle principale du programme}{17}{section.3.9}%
+\contentsline {section}{\numberline {3.10}Validation de la commande de la matrice}{17}{section.3.10}%
+\contentsline {section}{\numberline {3.11}Validation des détecteurs d'enveloppe}{17}{section.3.11}%
+\contentsline {chapter}{\numberline {4}Tableau récapitulatif des composants utilisés}{20}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Diagramme de Bode}{22}{chapter.5}%

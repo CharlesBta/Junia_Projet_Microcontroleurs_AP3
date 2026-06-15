@@ -579,15 +579,15 @@ On peut en conclure que :
 
 \section{Répartition entre le C et l'assembleur}
 
-La consigne demande d'utiliser le langage C pour la configuration du microcontrôleur, l'acquisition et le traitement des données. L'assembleur est utilisé pour la communication avec la matrice de LEDs, car le protocole impose un timing trop précis pour être réalisé simplement en C.
+Le langage C est utilisé pour la configuration du microcontrôleur, l'acquisition et le traitement des données. L'assembleur est utilisé pour la communication avec la matrice de LEDs, car le protocole impose un timing trop précis pour être réalisé simplement en C.
 
 On a donc séparé le programme en deux fichiers :
 \begin{itemize}
-    \item \texttt{main.c} contient la configuration du PIC, la lecture des quatre détecteurs d'enveloppe, le calcul des niveaux et la préparation de l'affichage ;
+    \item \texttt{main.c} contient la configuration du PIC, la lecture des quatre détecteurs d'enveloppe, le calcul des niveaux ainsi que la préparation de l'affichage.
     \item \texttt{tx.asm} contient la fonction \texttt{TX\_64LEDS}, qui envoie les 2048 bits de commande à la matrice.
 \end{itemize}
 
-La fonction assembleur est déclarée dans le fichier C avec le mot-clé \texttt{extern}. Le tableau qui contient les couleurs des LEDs est également partagé entre les deux langages :
+La fonction assembleur est déclarée dans \texttt{main.c} avec le mot-clé \texttt{extern}. Le tableau contenant les couleurs des LEDs est également partagé entre les deux langages :
 
 \begin{lstlisting}[language=C]
 extern void TX_64LEDS(void);
@@ -605,7 +605,7 @@ GLOBAL _pC
 
 \section{Configuration du PIC18F25K40}
 
-Le microcontrôleur fonctionne avec son oscillateur interne réglé à \(64\,\mathrm{MHz}\). Le watchdog est désactivé afin qu'il ne redémarre pas le programme pendant son fonctionnement. La fréquence est également définie par \texttt{\_XTAL\_FREQ}, ce qui permet d'utiliser les fonctions de délai du compilateur.
+Le microcontrôleur fonctionne avec son oscillateur interne réglé à \(64\,\mathrm{MHz}\). La fréquence est également définie par \texttt{\_XTAL\_FREQ}, ce qui permet d'utiliser les fonctions de délai du compilateur.
 
 Les broches sont configurées de la façon suivante :
 
@@ -627,7 +627,7 @@ Les broches sont configurées de la façon suivante :
 \end{tabular}
 \end{center}
 
-Les registres \texttt{ANSELx} permettent de choisir les broches analogiques et les registres \texttt{TRISx} permettent de choisir le sens des broches. On initialise également les registres \texttt{LATx} à 0 afin que les LEDs restent éteintes pendant le démarrage.
+Les registres \texttt{ANSELx} permettent de choisir les broches analogiques. Les registres \texttt{TRISx} quand à eux permettent de choisir le sens des broches. On initialise également les registres \texttt{LATx} à 0 afin que les LEDs restent éteintes pendant le démarrage.
 
 \section{Configuration et lecture de l'ADC}
 
@@ -817,16 +817,48 @@ La trame dure environ \(2{,}56\,\mathrm{ms}\), puis le programme attend \(20\,\m
 
 \section{Validation de la commande de la matrice}
 
-La consigne demande de vérifier le signal de commande à l'oscilloscope. Les valeurs à contrôler sur la broche \texttt{RB5} sont les suivantes :
-\begin{itemize}
-    \item une période proche de \(1{,}25\,\mu\mathrm{s}\) pour chaque bit ;
-    \item un état haut proche de \(0{,}375\,\mu\mathrm{s}\) pour un bit à 0 ;
-    \item un état haut compris entre \(0{,}75\,\mu\mathrm{s}\) et \(0{,}8125\,\mu\mathrm{s}\) pour un bit à 1 ;
-    \item une durée de trame proche de \(2{,}56\,\mathrm{ms}\) ;
-    \item un état bas d'au moins \(100\,\mu\mathrm{s}\) entre deux trames.
-\end{itemize}
+Le signal de commande de la matrice a été observé à l'oscilloscope sur la
+broche \texttt{RB5}. L'oscillogramme permet de distinguer les impulsions
+correspondant aux bits 0 et 1. La largeur de l'état haut est plus courte pour
+un bit à 0 que pour un bit à 1, tandis que la période totale reste proche de
+\(1{,}25\,\mu\mathrm{s}\).
 
-Ces valeurs correspondent au timing attendu par la matrice SK6812RGBW. Les oscillogrammes expérimentaux permettront de vérifier que les durées obtenues sur la carte correspondent bien aux durées calculées.
+ \begin{figure}[htbp]
+     \centering
+     \includegraphics[width=0.9\textwidth]{binaire.png}
+     \caption{Observation des bits 0 et 1 du signal de commande sur RB5.}
+     \label{fig:commande_matrice}
+ \end{figure}
+
+Les valeurs théoriques à retrouver sont un état haut d'environ
+\(0{,}375\,\mu\mathrm{s}\) pour un bit à 0 et compris entre
+\(0{,}75\,\mu\mathrm{s}\) et \(0{,}8125\,\mu\mathrm{s}\) pour un bit à 1.
+La présence de ces deux largeurs d'impulsion confirme que la fonction
+\texttt{TX\_64LEDS} transmet correctement les deux valeurs logiques attendues
+par la matrice SK6812RGBW.
+
+\section{Validation des détecteurs d'enveloppe}
+
+Les sorties des détecteurs d'enveloppe ont également été observées à
+l'oscilloscope. La tension obtenue suit les variations d'amplitude du signal
+audio sans reproduire ses oscillations rapides. Le condensateur se charge
+lorsque l'amplitude augmente, puis se décharge progressivement à travers la
+résistance.
+
+ \begin{figure}[htbp]
+     \centering
+     \includegraphics[width=0.9\textwidth]{enveloppes.png}
+     \caption{Observation des tensions en sortie des détecteurs d'enveloppe.}
+     \label{fig:detecteurs_enveloppe}
+ \end{figure}
+
+Cette observation confirme que les détecteurs transforment les signaux
+filtrés en tensions lentes représentatives de leur amplitude. Ces tensions
+peuvent ainsi être acquises par l'ADC du microcontrôleur. La décharge
+progressive observée est cohérente avec la constante de temps choisie :
+\[
+\tau = R_e C_e = 47\,\mathrm{ms}.
+\]
 
 \newpage
 

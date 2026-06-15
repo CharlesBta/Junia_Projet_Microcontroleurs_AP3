@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.5)  15 JUN 2026 13:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.6.5)  15 JUN 2026 16:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -706,22 +706,22 @@ Chapitre 1.
 ] [3] [4]
 Chapitre 2.
 
-Underfull \hbox (badness 10000) in paragraph at lines 201--203
+Underfull \hbox (badness 10000) in paragraph at lines 203--205
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 214--216
+Underfull \hbox (badness 10000) in paragraph at lines 216--218
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 218--220
+Underfull \hbox (badness 10000) in paragraph at lines 220--222
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 235--237
+Underfull \hbox (badness 10000) in paragraph at lines 237--239
 
  []
 
@@ -732,78 +732,97 @@ Underfull \hbox (badness 10000) in paragraph at lines 235--237
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [6] [7] [8] [9] [10]
-Underfull \hbox (badness 10000) in paragraph at lines 515--517
+Underfull \hbox (badness 10000) in paragraph at lines 517--519
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 518--520
+Underfull \hbox (badness 10000) in paragraph at lines 520--522
 
  []
 
-<./img/excel.png, id=222, 2109.8825pt x 1144.275pt>
+<./img/excel.png, id=282, 2109.8825pt x 1144.275pt>
 File: ./img/excel.png Graphic file (type png)
 <use ./img/excel.png>
-Package pdftex.def Info: ./img/excel.png  used on input line 521.
+Package pdftex.def Info: ./img/excel.png  used on input line 523.
 (pdftex.def)             Requested size: 464.1756pt x 251.74127pt.
 
-Overfull \hbox (26.2077pt too wide) in paragraph at lines 521--522
+Overfull \hbox (26.2077pt too wide) in paragraph at lines 523--524
 [][] 
  []
 
 [11 <./img/excel.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 538--540
+Underfull \hbox (badness 10000) in paragraph at lines 540--542
 
  []
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 553--555
+Underfull \hbox (badness 10000) in paragraph at lines 555--557
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 556--558
+Underfull \hbox (badness 10000) in paragraph at lines 558--560
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 566--568
+Underfull \hbox (badness 10000) in paragraph at lines 568--570
 
  []
 
 [13]
 Chapitre 3.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+) (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
+) [14
 
-Underfull \hbox (badness 10000) in paragraph at lines 608--608
+] [15] [16]
+<./img/binaire.png, id=328, 803.0pt x 481.8pt>
+File: ./img/binaire.png Graphic file (type png)
+<use ./img/binaire.png>
+Package pdftex.def Info: ./img/binaire.png  used on input line 828.
+(pdftex.def)             Requested size: 407.66833pt x 244.60464pt.
+<./img/enveloppes.png, id=329, 803.0pt x 481.8pt>
+File: ./img/enveloppes.png Graphic file (type png)
+<use ./img/enveloppes.png>
+Package pdftex.def Info: ./img/enveloppes.png  used on input line 850.
+(pdftex.def)             Requested size: 407.66833pt x 244.60464pt.
+ [17] [18 <./img/binaire.png (PNG copy)> <./img/enveloppes.png (PNG copy)>] [19]
+Chapitre 4.
+
+Underfull \hbox (badness 10000) in paragraph at lines 897--897
 []|\T1/cmr/m/n/9 CdecOPA2, CdecMCU1, Cde-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 638--638
+Underfull \hbox (badness 10000) in paragraph at lines 927--927
 []|\T1/cmr/m/n/9 R_LED0, R_LED1, R_LED2,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 638--638
+Underfull \hbox (badness 10000) in paragraph at lines 927--927
 \T1/cmr/m/n/9 R_LED3, R_LED4, R_LED5,
  []
 
 
-ignored: Infinite glue shrinkage found in box being split [14
+ignored: Infinite glue shrinkage found in box being split [20
 
-] [15]
-Chapitre 4.
-<./img/bode.png, id=258, 462.528pt x 346.896pt>
+] [21]
+Chapitre 5.
+<./img/bode.png, id=374, 462.528pt x 346.896pt>
 File: ./img/bode.png Graphic file (type png)
 <use ./img/bode.png>
-Package pdftex.def Info: ./img/bode.png  used on input line 681.
+Package pdftex.def Info: ./img/bode.png  used on input line 970.
 (pdftex.def)             Requested size: 462.52686pt x 346.89514pt.
 
-Overfull \hbox (24.55896pt too wide) in paragraph at lines 681--682
+Overfull \hbox (24.55896pt too wide) in paragraph at lines 970--971
 [][] 
  []
 
-[16
+[22
 
  <./img/bode.png>] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
@@ -813,21 +832,21 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `rapport.out' has not changed.
-(rerunfilecheck)             Checksum: D7A4473E929BD3B877A62D914BEFF0D1;5410.
+(rerunfilecheck)             Checksum: 5BA1F85DAC54C4B93F7A3EFBB161004B;8197.
  ) 
 Here is how much of TeX's memory you used:
- 25106 strings out of 467525
- 457869 string characters out of 5418983
- 913625 words of memory out of 5000000
- 53561 multiletter control sequences out of 15000+600000
- 646360 words of font info for 77 fonts, out of 8000000 for 9000
+ 25582 strings out of 467525
+ 463050 string characters out of 5418983
+ 1089297 words of memory out of 5000000
+ 53991 multiletter control sequences out of 15000+600000
+ 647512 words of font info for 83 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,11n,94p,715b,683s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc0900.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on rapport.pdf (17 pages, 1096438 bytes).
+ 84i,12n,94p,707b,1223s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc0900.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on rapport.pdf (23 pages, 1255565 bytes).
 PDF statistics:
- 396 PDF objects out of 1000 (max. 8388607)
- 314 compressed objects within 4 object streams
- 48 named destinations out of 1000 (max. 500000)
- 239 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 532 PDF objects out of 1000 (max. 8388607)
+ 435 compressed objects within 5 object streams
+ 85 named destinations out of 1000 (max. 500000)
+ 345 words of extra memory for PDF output out of 10000 (max. 10000000)
 
