@@ -629,7 +629,7 @@ Les broches sont configurées de la façon suivante :
 
 Les registres \texttt{ANSELx} permettent de choisir les broches analogiques. Les registres \texttt{TRISx} quand à eux permettent de choisir le sens des broches. On initialise également les registres \texttt{LATx} à 0 afin que les LEDs restent éteintes pendant le démarrage.
 
-`
+
 \section{Configuration et lecture de l'ADC}
 
 L'ADC utilise \(V_{DD}\) et \(V_{SS}\) comme références. Avec une alimentation
@@ -653,7 +653,7 @@ correspondant aux aigus. Quatre conversions sont moyennées pour chaque bande
 afin de réduire les variations de mesure tout en conservant un affichage
 réactif.
 
-`
+
 \section{Calibration du niveau de repos}
 
 Les détecteurs d'enveloppe peuvent fournir une faible tension résiduelle en
@@ -673,7 +673,7 @@ La LED principale s'allume lorsque l'opération est terminée. Le bouton relié
 La calibration doit être réalisée sans signal audio, sinon une partie du
 signal serait considérée comme le niveau de repos.
 
-`
+
 \section{Calcul de la hauteur des barres}
 
 Pour chaque bande, le programme retire le niveau de repos mesuré pendant la
@@ -691,7 +691,7 @@ Lorsqu'il diminue, la barre descend seulement d'une LED à chaque tour de
 boucle. Ce choix permet de conserver une réponse rapide à la montée tout en
 rendant la descente plus progressive et plus lisible.
 
-`
+
 \section{Affichage sur les LEDs de test}
 
 Les huit LEDs du port C affichent la hauteur de la bande possédant le niveau
