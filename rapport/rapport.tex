@@ -106,7 +106,7 @@
 
 \title{\DocName}
 \author{\DocAuthors}
-\date{\textbf{JUNIA - ISEN - AP3}}
+\date{\textbf{JUNIA - ISEN - AP3} \url{https://github.com/CharlesBta/Junia_Projet_Microcontroleurs_AP3.git}}
 
 \newcounter{questioncounter}
 \setcounter{questioncounter}{0}
@@ -694,7 +694,7 @@ rendant la descente plus progressive et plus lisible.
 
 \section{Affichage sur les LEDs de test}
 
-Les huit LEDs du port C affichent la hauteur de la bande possédant le niveau
+Les huit LEDs de la carte affichent la hauteur de la bande possédant le niveau
 le plus élevé. Pour une hauteur donnée, le programme allume le même nombre
 de LEDs en partant du bas.
 
@@ -733,68 +733,6 @@ On a choisi les couleurs suivantes :
 
 Les octets bleu et blanc restent à 0. Les valeurs utilisées restent de l'ordre de quelques dizaines, comme demandé dans la consigne, afin de limiter la luminosité et le courant consommé par la matrice.
 
-\section{Envoi des données en assembleur}
-
-La fonction \texttt{TX\_64LEDS} commence par charger l'adresse du tableau dans le registre d'adressage indirect \texttt{FSR0}. Le registre \texttt{POSTINC0} permet ensuite de lire un octet et d'incrémenter automatiquement le pointeur.
-
-Le compteur d'octets est placé dans \texttt{PRODL}. Il est initialisé à 0 et l'instruction \texttt{DECFSZ} permet d'effectuer 256 tours avant de sortir de la boucle. Pour chaque octet, les bits sont envoyés du bit 7 au bit 0, donc du bit de poids fort au bit de poids faible.
-
-Le protocole de la matrice code chaque bit avec une impulsion de période \(1{,}25\,\mu\mathrm{s}\). Comme une instruction du PIC dure quatre périodes d'horloge, on a :
-\[
-T_{cycle} = \frac{4}{64 \times 10^6} = 62{,}5\,\mathrm{ns}
-\]
-
-On utilise des instructions \texttt{NOP} et des branchements afin de garder une durée totale de 20 cycles par bit :
-\[
-20 \times 62{,}5\,\mathrm{ns} = 1{,}25\,\mu\mathrm{s}
-\]
-
-Les durées théoriques obtenues avec le programme sont :
-
-\begin{center}
-\small
-\begin{tabular}{|p{2.3cm}|p{3.1cm}|p{4.1cm}|p{2.4cm}|}
-\hline
-\textbf{Bit envoyé} & \textbf{Cycles à l'état haut} & \textbf{Durée à l'état haut} & \textbf{Période} \\
-\hline
-0 & 6 cycles & \(0{,}375\,\mu\mathrm{s}\) & \(1{,}25\,\mu\mathrm{s}\) \\
-\hline
-1 & 12 à 13 cycles & \(0{,}75\) à \(0{,}8125\,\mu\mathrm{s}\) & \(1{,}25\,\mu\mathrm{s}\) \\
-\hline
-\end{tabular}
-\normalsize
-\end{center}
-
-La différence entre 12 et 13 cycles vient du dernier bit de chaque octet. Ce dernier laisse le temps de charger l'octet suivant tout en conservant une période totale constante.
-
-Une trame complète contient :
-\[
-64 \times 4 \times 8 = 2048 \text{ bits}
-\]
-
-Sa durée théorique est donc :
-\[
-T_{trame} = 2048 \times 1{,}25\,\mu\mathrm{s}
-= 2{,}56\,\mathrm{ms}
-\]
-
-Après chaque trame, le programme impose d'abord un délai de \(100\,\mu\mathrm{s}\), puis le délai principal de \(20\,\mathrm{ms}\). La ligne reste à l'état bas pendant ces délais, ce qui permet à la matrice de valider les 2048 bits reçus avant la trame suivante.
-
-\section{Boucle principale du programme}
-
-Après l'initialisation et la calibration, le programme répète les opérations suivantes :
-
-\begin{lstlisting}[language=C]
-mettre_a_jour_niveaux();
-dessiner_matrice();
-TX_64LEDS();
-
-__delay_us(100);
-__delay_ms(20);
-\end{lstlisting}
-
-La trame dure environ \(2{,}56\,\mathrm{ms}\), puis le programme attend \(20\,\mathrm{ms}\). L'affichage est donc actualisé environ 44 fois par seconde, ce qui est suffisamment rapide pour suivre les variations du signal audio sans clignotement visible.
-
 \section{Validation de la commande de la matrice}
 
 Le signal de commande de la matrice a été observé à l'oscilloscope sur la
@@ -815,8 +753,9 @@ Les valeurs théoriques à retrouver sont un état haut d'environ
 \(0{,}75\,\mu\mathrm{s}\) et \(0{,}8125\,\mu\mathrm{s}\) pour un bit à 1.
 La présence de ces deux largeurs d'impulsion confirme que la fonction
 \texttt{TX\_64LEDS} transmet correctement les deux valeurs logiques attendues
-par la matrice SK6812RGBW.
+par la matrice.
 
+\newpage
 \section{Validation des détecteurs d'enveloppe}
 
 Les sorties des détecteurs d'enveloppe ont également été observées à

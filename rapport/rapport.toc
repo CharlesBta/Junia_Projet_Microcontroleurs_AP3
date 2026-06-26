@@ -32,9 +32,7 @@
 \contentsline {section}{\numberline {3.5}Calcul de la hauteur des barres}{15}{section.3.5}%
 \contentsline {section}{\numberline {3.6}Affichage sur les LEDs de test}{15}{section.3.6}%
 \contentsline {section}{\numberline {3.7}Création de l'affichage de la matrice}{15}{section.3.7}%
-\contentsline {section}{\numberline {3.8}Envoi des données en assembleur}{16}{section.3.8}%
-\contentsline {section}{\numberline {3.9}Boucle principale du programme}{16}{section.3.9}%
-\contentsline {section}{\numberline {3.10}Validation de la commande de la matrice}{17}{section.3.10}%
-\contentsline {section}{\numberline {3.11}Validation des détecteurs d'enveloppe}{17}{section.3.11}%
-\contentsline {chapter}{\numberline {4}Tableau récapitulatif des composants utilisés}{19}{chapter.4}%
-\contentsline {chapter}{\numberline {5}Diagramme de Bode}{21}{chapter.5}%
+\contentsline {section}{\numberline {3.8}Validation de la commande de la matrice}{16}{section.3.8}%
+\contentsline {section}{\numberline {3.9}Validation des détecteurs d'enveloppe}{17}{section.3.9}%
+\contentsline {chapter}{\numberline {4}Tableau récapitulatif des composants utilisés}{18}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Diagramme de Bode}{20}{chapter.5}%
